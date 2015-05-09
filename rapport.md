@@ -5,7 +5,7 @@ __Auteurs :__ Stéphanie LEVON & Vincent ROCHER
 ##Sujet 
 Le but de ce projet est de gérer des examens demandés par des prescripteurs. Un examen consistera en l'étude, pour un patient donné, d'un panel de gènes et produira un rapport/compte-rendu clinique.
 ##Schéma de la base
-![schéma_base](schema_base.svg)
+![schéma_base](schema_base.png)
 #Création des tables
 ##Table `type_personnel`
 ###Description

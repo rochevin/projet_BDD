@@ -1014,9 +1014,11 @@ body .markdown-body
     page-break-after: avoid;
   }
 }
-</style><title>rapport</title></head><body><article class="markdown-body"><div class="toc">
+</style><title>rapport</title></head><body><article class="markdown-body"><h1 style="text-align: center;">Projet Base de données</h1>
+
+<p><strong>Auteurs :</strong> Stéphanie LEVON &amp; Vincent ROCHER</p>
+<div class="toc">
 <ul>
-<li><a href="#projet-base-de-donnees">Projet Base de données</a></li>
 <li><a href="#introduction">Introduction</a><ul>
 <li><a href="#sujet">Sujet</a></li>
 <li><a href="#schema-de-la-base">Schéma de la base</a></li>
@@ -1037,12 +1039,35 @@ body .markdown-body
 <li><a href="#creation-de-la-table_1">Création de la table</a></li>
 </ul>
 </li>
+<li><a href="#table-panel_gene">Table panel_gene</a><ul>
+<li><a href="#description_3">Description</a></li>
+<li><a href="#creation-de-la-table_2">Création de la table</a></li>
+</ul>
+</li>
+<li><a href="#table-gene">Table gene</a><ul>
+<li><a href="#description_4">Description</a></li>
+<li><a href="#creation-de-la-table_3">Création de la table</a></li>
+</ul>
+</li>
+<li><a href="#table-assoc_panel_gene">Table assoc_panel_gene</a><ul>
+<li><a href="#description_5">Description</a></li>
+<li><a href="#creation-de-la-table_4">Création de la table</a></li>
+</ul>
+</li>
+<li><a href="#table-examen">Table examen</a><ul>
+<li><a href="#description_6">Description</a></li>
+<li><a href="#creation-de-la-table_5">Création de la table</a></li>
+</ul>
+</li>
+<li><a href="#table-rapport">Table rapport</a><ul>
+<li><a href="#description_7">Description</a></li>
+<li><a href="#creation-de-la-table_6">Création de la table</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </div>
-<h1 id="projet-base-de-donnees"><a name="user-content-projet-base-de-donnees" href="#projet-base-de-donnees" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Projet Base de données</h1>
-<p><strong>Auteurs :</strong> Stéphanie LEVON &amp; Vincent ROCHER</p>
 <h1 id="introduction"><a name="user-content-introduction" href="#introduction" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Introduction</h1>
 <h2 id="sujet"><a name="user-content-sujet" href="#sujet" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Sujet</h2>
 <p>Le but de ce projet est de gérer des examens demandés par des prescripteurs. Un examen consistera en l&rsquo;étude, pour un patient donné, d&rsquo;un panel de gènes et produira un rapport/compte-rendu clinique.</p>
@@ -1116,14 +1141,14 @@ ENGINE=InnoDB;
     personnel_mail VARCHAR(100) DEFAULT NULL,
     personnel_identifiant VARCHAR(60) NOT NULL,
     personnel_password CHAR(40) CHARACTER SET ASCII NOT NULL,
-    personnel_type_personnel_id INT UNSIGNED,
+    personnel_type_personnel_id INT UNSIGNED NOT NULL,
     UNIQUE KEY personnel_uni_mail (personnel_mail),
     UNIQUE KEY personnel_uni_identifiant (personnel_identifiant),
     CONSTRAINT fk_type_personnel_id
         FOREIGN KEY (personnel_type_personnel_id) 
         REFERENCES type_personnel(type_personnel_id)
 )
-ENGINE=InnoDB;          
+ENGINE=InnoDB DEFAULT CHARSET=utf8;          
 </code></pre>
 
 <h2 id="table-patient"><a name="user-content-table-patient" href="#table-patient" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Table <code>patient</code></h2>
@@ -1175,10 +1200,10 @@ ENGINE=InnoDB;
     patient_ethnie VARCHAR(60) DEFAULT NULL,
     patient_date_naissance DATE DEFAULT NULL,
     patient_num_tel VARCHAR(10) DEFAULT NULL,
-    patient_pere_id INT UNSIGNED,
-    patient_mere_id INT UNSIGNED,
-    patient_prescripteur_id INT UNSIGNED,
-    patient_clinicien_id INT UNSIGNED,
+    patient_pere_id INT UNSIGNED DEFAULT NULL,
+    patient_mere_id INT UNSIGNED DEFAULT NULL,
+    patient_prescripteur_id INT UNSIGNED DEFAULT NULL,
+    patient_clinicien_id INT UNSIGNED DEFAULT NULL,
     UNIQUE KEY patient_uni_mail (patient_mail),
     CONSTRAINT fk_pere_id
         FOREIGN KEY (patient_pere_id) 
@@ -1192,6 +1217,167 @@ ENGINE=InnoDB;
     CONSTRAINT fk_clinicien_id
         FOREIGN KEY (patient_clinicien_id) 
         REFERENCES personnel(personnel_id)   
+)
+ENGINE=InnoDB;          
+</code></pre>
+
+<h2 id="table-panel_gene"><a name="user-content-table-panel_gene" href="#table-panel_gene" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Table <code>panel_gene</code></h2>
+<h3 id="description_3"><a name="user-content-description_3" href="#description_3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Description</h3>
+<table>
+<thead>
+<tr>
+<th align="left">panel_gene_id</th>
+<th>panel_gene_nom</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">INT</td>
+<td>VARCHAR</td>
+</tr>
+</tbody>
+</table>
+<h3 id="creation-de-la-table_2"><a name="user-content-creation-de-la-table_2" href="#creation-de-la-table_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Création de la table</h3>
+<pre><code class="sql">CREATE TABLE panel_gene (
+    panel_gene_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    panel_gene_nom VARCHAR(60) NOT NULL
+)
+ENGINE=InnoDB;          
+</code></pre>
+
+<h2 id="table-gene"><a name="user-content-table-gene" href="#table-gene" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Table <code>gene</code></h2>
+<h3 id="description_4"><a name="user-content-description_4" href="#description_4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Description</h3>
+<table>
+<thead>
+<tr>
+<th align="left">gene_id</th>
+<th>gene_nom</th>
+<th>gene_chromosome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">INT</td>
+<td>VARCHAR</td>
+<td>CHAR</td>
+</tr>
+</tbody>
+</table>
+<h3 id="creation-de-la-table_3"><a name="user-content-creation-de-la-table_3" href="#creation-de-la-table_3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Création de la table</h3>
+<pre><code class="sql">CREATE TABLE gene (
+    gene_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    gene_nom VARCHAR(60) NOT NULL,
+    gene_chromosome CHAR(2) NOT NULL
+)
+ENGINE=InnoDB;          
+</code></pre>
+
+<h2 id="table-assoc_panel_gene"><a name="user-content-table-assoc_panel_gene" href="#table-assoc_panel_gene" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Table <code>assoc_panel_gene</code></h2>
+<h3 id="description_5"><a name="user-content-description_5" href="#description_5" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Description</h3>
+<table>
+<thead>
+<tr>
+<th align="left">assoc_gene_id</th>
+<th>assoc_panel_id</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">INT</td>
+<td>INT</td>
+</tr>
+</tbody>
+</table>
+<h3 id="creation-de-la-table_4"><a name="user-content-creation-de-la-table_4" href="#creation-de-la-table_4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Création de la table</h3>
+<pre><code class="sql">CREATE TABLE assoc_panel_gene(
+    assoc_gene_id INT NOT NULL,
+    assoc_panel_id INT NOT NULL,
+    CONSTRAINT pk_assoc PRIMARY KEY (gene_id,panel_gene_id),
+    CONSTRAINT fk_assoc_gene_id FOREIGN KEY (assoc_gene_id)
+        REFERENCES gene(gene_id),
+    CONSTRAINT fk_assoc_panel_id FOREIGN KEY (assoc_panel_id)
+        REFERENCES panel_gene(panel_gene_id)
+)
+ENGINE=InnoDB;          
+</code></pre>
+
+<h2 id="table-examen"><a name="user-content-table-examen" href="#table-examen" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Table <code>examen</code></h2>
+<h3 id="description_6"><a name="user-content-description_6" href="#description_6" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Description</h3>
+<table>
+<thead>
+<tr>
+<th align="left">examen_id</th>
+<th>examen_nom</th>
+<th>examen_date</th>
+<th>examen_patient_id</th>
+<th>examen_panel_gene_id</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">INT</td>
+<td>VARCHAR</td>
+<td>DATE</td>
+<td>INT</td>
+<td>INT</td>
+</tr>
+</tbody>
+</table>
+<h3 id="creation-de-la-table_5"><a name="user-content-creation-de-la-table_5" href="#creation-de-la-table_5" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Création de la table</h3>
+<pre><code class="sql">CREATE TABLE examen (
+    examen_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    examen_nom VARCHAR(60) NOT NULL,
+    examen_date DATE DEFAULT NULL,
+    examen_patient_id INT UNSIGNED NOT NULL,
+    examen_panel_gene_id INT UNSIGNED NOT NULL,
+    CONSTRAINT fk_patient_id
+        FOREIGN KEY (examen_patient_id) 
+        REFERENCES patient(patient_id),
+    CONSTRAINT fk_panel_gene_id
+        FOREIGN KEY (examen_panel_gene_id) 
+        REFERENCES panel_gene(panel_gene_id)
+)
+ENGINE=InnoDB;          
+</code></pre>
+
+<h2 id="table-rapport"><a name="user-content-table-rapport" href="#table-rapport" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Table <code>rapport</code></h2>
+<h3 id="description_7"><a name="user-content-description_7" href="#description_7" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Description</h3>
+<table>
+<thead>
+<tr>
+<th align="left">rapport_id</th>
+<th>rapport_nom</th>
+<th>rapport_date</th>
+<th>rapport_pathologie</th>
+<th>rapport_examen_id</th>
+<th>rapport_prescripteur_id</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">INT</td>
+<td>VARCHAR</td>
+<td>DATE</td>
+<td>VARCHAR</td>
+<td>INT</td>
+<td>INT</td>
+</tr>
+</tbody>
+</table>
+<h3 id="creation-de-la-table_6"><a name="user-content-creation-de-la-table_6" href="#creation-de-la-table_6" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Création de la table</h3>
+<pre><code class="sql">CREATE TABLE rapport (
+    rapport_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    rapport_nom VARCHAR(60) NOT NULL,
+    rapport_date DATE DEFAULT NULL,
+    rapport_pathologie VARCHAR(60) NOT NULL,
+    rapport_examen_id INT UNSIGNED NOT NULL,
+    rapport_prescripteur_id INT UNSIGNED NOT NULL,
+    CONSTRAINT fk_examen_id
+        FOREIGN KEY (rapport_examen_id) 
+        REFERENCES examen(examen_id),
+    CONSTRAINT fk_prescripteur_id
+        FOREIGN KEY (rapport_prescripteur_id) 
+        REFERENCES personnel(personnel_id)
 )
 ENGINE=InnoDB;          
 </code></pre></article></body></html>

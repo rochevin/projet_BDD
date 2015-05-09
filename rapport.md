@@ -1,8 +1,8 @@
+<h1 style="text-align: center;">Projet Base de données</h1>
+__Auteurs :__ Stéphanie LEVON & Vincent ROCHER
 
 [TOC]
 
-#Projet Base de données
-__Auteurs :__ Stéphanie LEVON & Vincent ROCHER
 #Introduction
 ##Sujet 
 Le but de ce projet est de gérer des examens demandés par des prescripteurs. Un examen consistera en l'étude, pour un patient donné, d'un panel de gènes et produira un rapport/compte-rendu clinique.
@@ -42,14 +42,14 @@ CREATE TABLE personnel (
     personnel_mail VARCHAR(100) DEFAULT NULL,
     personnel_identifiant VARCHAR(60) NOT NULL,
     personnel_password CHAR(40) CHARACTER SET ASCII NOT NULL,
-    personnel_type_personnel_id INT UNSIGNED,
+    personnel_type_personnel_id INT UNSIGNED NOT NULL,
     UNIQUE KEY personnel_uni_mail (personnel_mail),
     UNIQUE KEY personnel_uni_identifiant (personnel_identifiant),
     CONSTRAINT fk_type_personnel_id
         FOREIGN KEY (personnel_type_personnel_id) 
         REFERENCES type_personnel(type_personnel_id)
 )
-ENGINE=InnoDB;          
+ENGINE=InnoDB DEFAULT CHARSET=utf8;          
 ```
 ## Table `patient`
 ###Description
@@ -70,10 +70,10 @@ CREATE TABLE patient (
     patient_ethnie VARCHAR(60) DEFAULT NULL,
     patient_date_naissance DATE DEFAULT NULL,
     patient_num_tel VARCHAR(10) DEFAULT NULL,
-    patient_pere_id INT UNSIGNED,
-    patient_mere_id INT UNSIGNED,
-    patient_prescripteur_id INT UNSIGNED,
-    patient_clinicien_id INT UNSIGNED,
+    patient_pere_id INT UNSIGNED DEFAULT NULL,
+    patient_mere_id INT UNSIGNED DEFAULT NULL,
+    patient_prescripteur_id INT UNSIGNED DEFAULT NULL,
+    patient_clinicien_id INT UNSIGNED DEFAULT NULL,
     UNIQUE KEY patient_uni_mail (patient_mail),
     CONSTRAINT fk_pere_id
         FOREIGN KEY (patient_pere_id) 
@@ -87,6 +87,116 @@ CREATE TABLE patient (
     CONSTRAINT fk_clinicien_id
         FOREIGN KEY (patient_clinicien_id) 
         REFERENCES personnel(personnel_id)   
+)
+ENGINE=InnoDB;          
+```
+
+##Table `panel_gene`
+###Description
+panel_gene_id | panel_gene_nom
+:-----: | :------ 
+INT | VARCHAR
+
+
+
+###Création de la table
+``` sql
+CREATE TABLE panel_gene (
+    panel_gene_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    panel_gene_nom VARCHAR(60) NOT NULL
+)
+ENGINE=InnoDB;          
+```
+
+##Table `gene`
+###Description
+gene_id | gene_nom | gene_chromosome
+:-----: | :-----: | :------ 
+INT | VARCHAR | CHAR
+
+
+
+###Création de la table
+``` sql
+CREATE TABLE gene (
+    gene_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    gene_nom VARCHAR(60) NOT NULL,
+    gene_chromosome CHAR(2) NOT NULL
+)
+ENGINE=InnoDB;          
+```
+
+##Table `assoc_panel_gene`
+###Description
+assoc_gene_id | assoc_panel_id
+:-----: | :------ 
+INT | INT
+
+
+
+###Création de la table
+``` sql
+CREATE TABLE assoc_panel_gene(
+    assoc_gene_id INT NOT NULL,
+    assoc_panel_id INT NOT NULL,
+    CONSTRAINT pk_assoc PRIMARY KEY (gene_id,panel_gene_id),
+    CONSTRAINT fk_assoc_gene_id FOREIGN KEY (assoc_gene_id)
+        REFERENCES gene(gene_id),
+    CONSTRAINT fk_assoc_panel_id FOREIGN KEY (assoc_panel_id)
+        REFERENCES panel_gene(panel_gene_id)
+)
+ENGINE=InnoDB;          
+```
+
+##Table `examen`
+###Description
+examen_id | examen_nom | examen_date | examen_patient_id | examen_panel_gene_id
+:-----: | :-----: | :-----: | :-----: | :------ 
+INT | VARCHAR | DATE | INT | INT
+
+
+
+###Création de la table
+``` sql
+CREATE TABLE examen (
+    examen_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    examen_nom VARCHAR(60) NOT NULL,
+    examen_date DATE DEFAULT NULL,
+    examen_patient_id INT UNSIGNED NOT NULL,
+    examen_panel_gene_id INT UNSIGNED NOT NULL,
+    CONSTRAINT fk_patient_id
+        FOREIGN KEY (examen_patient_id) 
+        REFERENCES patient(patient_id),
+    CONSTRAINT fk_panel_gene_id
+        FOREIGN KEY (examen_panel_gene_id) 
+        REFERENCES panel_gene(panel_gene_id)
+)
+ENGINE=InnoDB;          
+```
+
+##Table `rapport`
+###Description
+rapport_id | rapport_nom | rapport_date | rapport_pathologie | rapport_examen_id | rapport_prescripteur_id
+:-----: | :-----: | :-----: | :-----: | :-----: | :------ 
+INT | VARCHAR | DATE | VARCHAR | INT | INT
+
+
+
+###Création de la table
+``` sql
+CREATE TABLE rapport (
+    rapport_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    rapport_nom VARCHAR(60) NOT NULL,
+    rapport_date DATE DEFAULT NULL,
+    rapport_pathologie VARCHAR(60) NOT NULL,
+    rapport_examen_id INT UNSIGNED NOT NULL,
+    rapport_prescripteur_id INT UNSIGNED NOT NULL,
+    CONSTRAINT fk_examen_id
+        FOREIGN KEY (rapport_examen_id) 
+        REFERENCES examen(examen_id),
+    CONSTRAINT fk_prescripteur_id
+        FOREIGN KEY (rapport_prescripteur_id) 
+        REFERENCES personnel(personnel_id)
 )
 ENGINE=InnoDB;          
 ```

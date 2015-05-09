@@ -876,7 +876,7 @@ body .markdown-body
 <h2>
 <a id="user-content-schéma-de-la-base" class="anchor" href="#sch%C3%A9ma-de-la-base" aria-hidden="true"><span class="octicon octicon-link"></span></a>Schéma de la base</h2>
 
-<p><a href="/Users/Vincent/Documents/rochevin_repositories/projet_BDD/schema_base.jpg" target="_blank"><img src="/Users/Vincent/Documents/rochevin_repositories/projet_BDD/schema_base.jpg" alt="schéma_base" style="max-width:100%;"></a></p>
+<p><a href="/Users/Vincent/Documents/rochevin_repositories/projet_BDD/schema_base.svg" target="_blank"><img src="/Users/Vincent/Documents/rochevin_repositories/projet_BDD/schema_base.svg" alt="schéma_base" style="max-width:100%;"></a></p>
 
 <h1>
 <a id="user-content-création-des-tables" class="anchor" href="#cr%C3%A9ation-des-tables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Création des tables</h1>
@@ -1140,7 +1140,7 @@ ENGINE<span class="pl-k">=</span>InnoDB;          </pre></div>
 <div class="highlight highlight-sql"><pre><span class="pl-k">CREATE</span> <span class="pl-k">TABLE</span> <span class="pl-en">assoc_panel_gene</span>(
     assoc_gene_id <span class="pl-k">INT</span> <span class="pl-k">NOT NULL</span>,
     assoc_panel_id <span class="pl-k">INT</span> <span class="pl-k">NOT NULL</span>,
-    <span class="pl-k">CONSTRAINT</span> pk_assoc <span class="pl-k">PRIMARY KEY</span> (gene_id,panel_gene_id),
+    <span class="pl-k">CONSTRAINT</span> pk_assoc <span class="pl-k">PRIMARY KEY</span> (assoc_gene_id,assoc_panel_id),
     <span class="pl-k">CONSTRAINT</span> fk_assoc_gene_id <span class="pl-k">FOREIGN KEY</span> (assoc_gene_id)
         <span class="pl-k">REFERENCES</span> gene(gene_id),
     <span class="pl-k">CONSTRAINT</span> fk_assoc_panel_id <span class="pl-k">FOREIGN KEY</span> (assoc_panel_id)

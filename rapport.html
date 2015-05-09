@@ -1050,7 +1050,10 @@ ENGINE<span class="pl-k">=</span>InnoDB DEFAULT CHARSET<span class="pl-k">=</spa
         <span class="pl-k">REFERENCES</span> personnel(personnel_id)
         <span class="pl-k">ON DELETE</span> <span class="pl-k">SET</span> <span class="pl-k">NULL</span>   
 )
-ENGINE<span class="pl-k">=</span>InnoDB;          </pre></div>
+ENGINE<span class="pl-k">=</span>InnoDB;  
+<span class="pl-c">--Création d'un index pour faciliter la recherche par nom</span>
+<span class="pl-k">CREATE</span> <span class="pl-k">INDEX</span> <span class="pl-en">ind_nom</span>
+<span class="pl-k">ON</span> patient (patient_nom);        </pre></div>
 
 <h2>
 <a id="user-content-table-panel_gene" class="anchor" href="#table-panel_gene" aria-hidden="true"><span class="octicon octicon-link"></span></a>Table <code>panel_gene</code>
@@ -1113,7 +1116,7 @@ ENGINE<span class="pl-k">=</span>InnoDB;          </pre></div>
 <div class="highlight highlight-sql"><pre><span class="pl-k">CREATE</span> <span class="pl-k">TABLE</span> <span class="pl-en">gene</span> (
     gene_id <span class="pl-k">INT</span> UNSIGNED <span class="pl-k">PRIMARY KEY</span> AUTO_INCREMENT,
     gene_nom <span class="pl-k">VARCHAR</span>(<span class="pl-c1">60</span>) <span class="pl-k">NOT NULL</span>,
-    gene_chromosome <span class="pl-k">CHAR</span>(<span class="pl-c1">2</span>) <span class="pl-k">NOT NULL</span>
+    gene_chromosome <span class="pl-k">CHAR</span>(<span class="pl-c1">2</span>) DEFAULT <span class="pl-k">NULL</span>
 )
 ENGINE<span class="pl-k">=</span>InnoDB;          </pre></div>
 

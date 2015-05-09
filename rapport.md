@@ -91,7 +91,10 @@ CREATE TABLE patient (
         REFERENCES personnel(personnel_id)
         ON DELETE SET NULL   
 )
-ENGINE=InnoDB;          
+ENGINE=InnoDB;  
+--Création d'un index pour faciliter la recherche par nom
+CREATE INDEX ind_nom
+ON patient (patient_nom);        
 ```
 
 ##Table `panel_gene`
@@ -124,7 +127,7 @@ INT | VARCHAR | CHAR
 CREATE TABLE gene (
     gene_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
     gene_nom VARCHAR(60) NOT NULL,
-    gene_chromosome CHAR(2) NOT NULL
+    gene_chromosome CHAR(2) DEFAULT NULL
 )
 ENGINE=InnoDB;          
 ```

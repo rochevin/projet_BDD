@@ -1,8 +1,6 @@
 <h1 style="text-align: center;">Projet Base de données</h1>
 __Auteurs :__ Stéphanie LEVON & Vincent ROCHER
 
-[TOC]
-
 #Introduction
 ##Sujet 
 Le but de ce projet est de gérer des examens demandés par des prescripteurs. Un examen consistera en l'étude, pour un patient donné, d'un panel de gènes et produira un rapport/compte-rendu clinique.

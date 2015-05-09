@@ -1023,12 +1023,20 @@ body .markdown-body
 </ul>
 </li>
 <li><a href="#creation-des-tables">Création des tables</a><ul>
-<li><a href="#table-patients">Table Patients</a><ul>
+<li><a href="#table-type_personnel">Table type_personnel</a><ul>
 <li><a href="#description">Description</a></li>
 <li><a href="#creation-de-la-table">Création de la table</a></li>
 </ul>
 </li>
-<li><a href="#table-type_personnel">Table type_personnel</a></li>
+<li><a href="#table-personnel">Table personnel</a><ul>
+<li><a href="#description_1">Description</a></li>
+</ul>
+</li>
+<li><a href="#table-patient">Table patient</a><ul>
+<li><a href="#description_2">Description</a></li>
+<li><a href="#creation-de-la-table_1">Création de la table</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -1041,23 +1049,101 @@ body .markdown-body
 <h2 id="schema-de-la-base"><a name="user-content-schema-de-la-base" href="#schema-de-la-base" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Schéma de la base</h2>
 <p><img alt="schéma_base" src="/Users/Vincent/Documents/rochevin_repositories/projet_BDD/schema_base.jpg" /></p>
 <h1 id="creation-des-tables"><a name="user-content-creation-des-tables" href="#creation-des-tables" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Création des tables</h1>
-<h2 id="table-patients"><a name="user-content-table-patients" href="#table-patients" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Table <code>Patients</code></h2>
+<h2 id="table-type_personnel"><a name="user-content-table-type_personnel" href="#table-type_personnel" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Table <code>type_personnel</code></h2>
 <h3 id="description"><a name="user-content-description" href="#description" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Description</h3>
-<p>La table <code>Patients</code> est composée de 11 colonnes, et autant de lignes qu&rsquo;il y a de patients.</p>
 <table>
 <thead>
 <tr>
-<th align="left">id</th>
-<th>num_secu</th>
-<th>prenom</th>
-<th>nom</th>
-<th>mail</th>
-<th>sexe</th>
-<th>ethnie</th>
-<th>date_naissance</th>
-<th>num_tel</th>
-<th>pere_id</th>
-<th align="right">mere_id</th>
+<th align="left">type_personnel_id</th>
+<th>type_personnel_nom</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">INT</td>
+<td>VARCHAR</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td>Administrateur</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td>Préscripteur</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td>Clinicien</td>
+</tr>
+</tbody>
+</table>
+<h3 id="creation-de-la-table"><a name="user-content-creation-de-la-table" href="#creation-de-la-table" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Création de la table</h3>
+<pre><code class="sql">CREATE TABLE type_personnel (
+    type_personnel_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    type_personnel_nom VARCHAR(60) NOT NULL
+)
+ENGINE=InnoDB;          
+</code></pre>
+
+<h2 id="table-personnel"><a name="user-content-table-personnel" href="#table-personnel" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Table <code>personnel</code></h2>
+<h3 id="description_1"><a name="user-content-description_1" href="#description_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Description</h3>
+<table>
+<thead>
+<tr>
+<th align="left">personnel_id</th>
+<th>personnel_nom</th>
+<th>personnel_prenom</th>
+<th>personnel_mail</th>
+<th>personnel_password</th>
+<th>personnel_type_personnel_id</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">INT</td>
+<td>VARCHAR</td>
+<td>VARCHAR</td>
+<td>VARCHAR</td>
+<td>CHAR(SHA1)</td>
+<td>INT</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="sql">CREATE TABLE personnel (
+    personnel_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    personnel_prenom VARCHAR(60) NOT NULL,
+    personnel_nom VARCHAR(60) NOT NULL,
+    personnel_mail VARCHAR(100) DEFAULT NULL,
+    personnel_identifiant VARCHAR(60) NOT NULL,
+    personnel_password CHAR(40) CHARACTER SET ASCII NOT NULL,
+    personnel_type_personnel_id INT UNSIGNED,
+    UNIQUE KEY personnel_uni_mail (personnel_mail),
+    UNIQUE KEY personnel_uni_identifiant (personnel_identifiant),
+    CONSTRAINT fk_type_personnel_id
+        FOREIGN KEY (personnel_type_personnel_id) 
+        REFERENCES type_personnel(type_personnel_id)
+)
+ENGINE=InnoDB;          
+</code></pre>
+
+<h2 id="table-patient"><a name="user-content-table-patient" href="#table-patient" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Table <code>patient</code></h2>
+<h3 id="description_2"><a name="user-content-description_2" href="#description_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Description</h3>
+<table>
+<thead>
+<tr>
+<th align="left">patient_id</th>
+<th>patient_num_secu</th>
+<th>patient_prenom</th>
+<th>patient_nom</th>
+<th>patient_mail</th>
+<th>patient_sexe</th>
+<th>patient_ethnie</th>
+<th>patient_date_naissance</th>
+<th>patient_num_tel</th>
+<th>patient_pere_id</th>
+<th>patient_mere_id</th>
+<th>patient_prescripteur_id</th>
+<th>patient_clinicien_id</th>
 </tr>
 </thead>
 <tbody>
@@ -1072,32 +1158,40 @@ body .markdown-body
 <td>DATE</td>
 <td>VARCHAR</td>
 <td>INT</td>
-<td align="right">INT</td>
+<td>INT</td>
+<td>INT</td>
+<td>INT</td>
 </tr>
 </tbody>
 </table>
-<h3 id="creation-de-la-table"><a name="user-content-creation-de-la-table" href="#creation-de-la-table" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Création de la table</h3>
-<pre><code class="sql">CREATE TABLE Patients (
-    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    num_secu INT UNSIGNED NOT NULL,
-    prenom VARCHAR(60) NOT NULL,
-    nom VARCHAR(60) NOT NULL,
-    mail VARCHAR(100) DEFAULT NULL,
-    sexe VARCHAR(10) DEFAULT NULL,
-    ethnie VARCHAR(60) DEFAULT NULL,
-    date_naissance DATE DEFAULT NULL,
-    num_tel VARCHAR(10) DEFAULT NULL,
-    pere_id INT UNSIGNED,
-    mere_id INT UNSIGNED,
-    UNIQUE KEY ind_uni_email (mail),
+<h3 id="creation-de-la-table_1"><a name="user-content-creation-de-la-table_1" href="#creation-de-la-table_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Création de la table</h3>
+<pre><code class="sql">CREATE TABLE patient (
+    patient_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    patient_num_secu INT UNSIGNED NOT NULL,
+    patient_prenom VARCHAR(60) NOT NULL,
+    patient_nom VARCHAR(60) NOT NULL,
+    patient_mail VARCHAR(100) DEFAULT NULL,
+    patient_sexe VARCHAR(10) DEFAULT NULL,
+    patient_ethnie VARCHAR(60) DEFAULT NULL,
+    patient_date_naissance DATE DEFAULT NULL,
+    patient_num_tel VARCHAR(10) DEFAULT NULL,
+    patient_pere_id INT UNSIGNED,
+    patient_mere_id INT UNSIGNED,
+    patient_prescripteur_id INT UNSIGNED,
+    patient_clinicien_id INT UNSIGNED,
+    UNIQUE KEY patient_uni_mail (patient_mail),
     CONSTRAINT fk_pere_id
-        FOREIGN KEY (pere_id) 
-        REFERENCES Patients(id),
+        FOREIGN KEY (patient_pere_id) 
+        REFERENCES patient(patient_id),
     CONSTRAINT fk_mere_id 
-        FOREIGN KEY (mere_id) 
-        REFERENCES Patients(id)
+        FOREIGN KEY (patient_mere_id) 
+        REFERENCES patient(patient_id),
+    CONSTRAINT fk_prescripteur_id
+        FOREIGN KEY (patient_prescripteur_id) 
+        REFERENCES personnel(personnel_id),
+    CONSTRAINT fk_clinicien_id
+        FOREIGN KEY (patient_clinicien_id) 
+        REFERENCES personnel(personnel_id)   
 )
 ENGINE=InnoDB;          
-</code></pre>
-
-<h2 id="table-type_personnel"><a name="user-content-table-type_personnel" href="#table-type_personnel" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Table <code>type_personnel</code></h2></article></body></html>
+</code></pre></article></body></html>

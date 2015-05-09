@@ -46,6 +46,7 @@ CREATE TABLE personnel (
     CONSTRAINT fk_type_personnel_id
         FOREIGN KEY (personnel_type_personnel_id) 
         REFERENCES type_personnel(type_personnel_id)
+        ON DELETE SET NULL
 )
 ENGINE=InnoDB DEFAULT CHARSET=utf8;          
 ```
@@ -75,16 +76,20 @@ CREATE TABLE patient (
     UNIQUE KEY patient_uni_mail (patient_mail),
     CONSTRAINT fk_pere_id
         FOREIGN KEY (patient_pere_id) 
-        REFERENCES patient(patient_id),
+        REFERENCES patient(patient_id)
+        ON DELETE SET NULL,
     CONSTRAINT fk_mere_id 
         FOREIGN KEY (patient_mere_id) 
-        REFERENCES patient(patient_id),
+        REFERENCES patient(patient_id)
+        ON DELETE SET NULL,
     CONSTRAINT fk_prescripteur_id
         FOREIGN KEY (patient_prescripteur_id) 
-        REFERENCES personnel(personnel_id),
+        REFERENCES personnel(personnel_id)
+        ON DELETE SET NULL,
     CONSTRAINT fk_clinicien_id
         FOREIGN KEY (patient_clinicien_id) 
-        REFERENCES personnel(personnel_id)   
+        REFERENCES personnel(personnel_id)
+        ON DELETE SET NULL   
 )
 ENGINE=InnoDB;          
 ```
@@ -139,9 +144,11 @@ CREATE TABLE assoc_panel_gene(
     assoc_panel_id INT NOT NULL,
     CONSTRAINT pk_assoc PRIMARY KEY (assoc_gene_id,assoc_panel_id),
     CONSTRAINT fk_assoc_gene_id FOREIGN KEY (assoc_gene_id)
-        REFERENCES gene(gene_id),
+        REFERENCES gene(gene_id)
+        ON DELETE CASCADE,
     CONSTRAINT fk_assoc_panel_id FOREIGN KEY (assoc_panel_id)
         REFERENCES panel_gene(panel_gene_id)
+        ON DELETE CASCADE
 )
 ENGINE=InnoDB;          
 ```
@@ -164,10 +171,12 @@ CREATE TABLE examen (
     examen_panel_gene_id INT UNSIGNED NOT NULL,
     CONSTRAINT fk_patient_id
         FOREIGN KEY (examen_patient_id) 
-        REFERENCES patient(patient_id),
+        REFERENCES patient(patient_id)
+        ON DELETE CASCADE,
     CONSTRAINT fk_panel_gene_id
         FOREIGN KEY (examen_panel_gene_id) 
         REFERENCES panel_gene(panel_gene_id)
+        ON DELETE SET NULL
 )
 ENGINE=InnoDB;          
 ```
@@ -191,10 +200,12 @@ CREATE TABLE rapport (
     rapport_prescripteur_id INT UNSIGNED NOT NULL,
     CONSTRAINT fk_examen_id
         FOREIGN KEY (rapport_examen_id) 
-        REFERENCES examen(examen_id),
+        REFERENCES examen(examen_id)
+        ON DELETE CASCADE,
     CONSTRAINT fk_prescripteur_id
         FOREIGN KEY (rapport_prescripteur_id) 
         REFERENCES personnel(personnel_id)
+        ON DELETE SET NULL
 )
 ENGINE=InnoDB;          
 ```

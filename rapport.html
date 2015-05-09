@@ -967,6 +967,7 @@ ENGINE<span class="pl-k">=</span>InnoDB;          </pre></div>
     <span class="pl-k">CONSTRAINT</span> fk_type_personnel_id
         <span class="pl-k">FOREIGN KEY</span> (personnel_type_personnel_id) 
         <span class="pl-k">REFERENCES</span> type_personnel(type_personnel_id)
+        <span class="pl-k">ON DELETE</span> <span class="pl-k">SET</span> <span class="pl-k">NULL</span>
 )
 ENGINE<span class="pl-k">=</span>InnoDB DEFAULT CHARSET<span class="pl-k">=</span>utf8;          </pre></div>
 
@@ -1034,16 +1035,20 @@ ENGINE<span class="pl-k">=</span>InnoDB DEFAULT CHARSET<span class="pl-k">=</spa
     UNIQUE KEY patient_uni_mail (patient_mail),
     <span class="pl-k">CONSTRAINT</span> fk_pere_id
         <span class="pl-k">FOREIGN KEY</span> (patient_pere_id) 
-        <span class="pl-k">REFERENCES</span> patient(patient_id),
+        <span class="pl-k">REFERENCES</span> patient(patient_id)
+        <span class="pl-k">ON DELETE</span> <span class="pl-k">SET</span> <span class="pl-k">NULL</span>,
     <span class="pl-k">CONSTRAINT</span> fk_mere_id 
         <span class="pl-k">FOREIGN KEY</span> (patient_mere_id) 
-        <span class="pl-k">REFERENCES</span> patient(patient_id),
+        <span class="pl-k">REFERENCES</span> patient(patient_id)
+        <span class="pl-k">ON DELETE</span> <span class="pl-k">SET</span> <span class="pl-k">NULL</span>,
     <span class="pl-k">CONSTRAINT</span> fk_prescripteur_id
         <span class="pl-k">FOREIGN KEY</span> (patient_prescripteur_id) 
-        <span class="pl-k">REFERENCES</span> personnel(personnel_id),
+        <span class="pl-k">REFERENCES</span> personnel(personnel_id)
+        <span class="pl-k">ON DELETE</span> <span class="pl-k">SET</span> <span class="pl-k">NULL</span>,
     <span class="pl-k">CONSTRAINT</span> fk_clinicien_id
         <span class="pl-k">FOREIGN KEY</span> (patient_clinicien_id) 
-        <span class="pl-k">REFERENCES</span> personnel(personnel_id)   
+        <span class="pl-k">REFERENCES</span> personnel(personnel_id)
+        <span class="pl-k">ON DELETE</span> <span class="pl-k">SET</span> <span class="pl-k">NULL</span>   
 )
 ENGINE<span class="pl-k">=</span>InnoDB;          </pre></div>
 
@@ -1142,9 +1147,11 @@ ENGINE<span class="pl-k">=</span>InnoDB;          </pre></div>
     assoc_panel_id <span class="pl-k">INT</span> <span class="pl-k">NOT NULL</span>,
     <span class="pl-k">CONSTRAINT</span> pk_assoc <span class="pl-k">PRIMARY KEY</span> (assoc_gene_id,assoc_panel_id),
     <span class="pl-k">CONSTRAINT</span> fk_assoc_gene_id <span class="pl-k">FOREIGN KEY</span> (assoc_gene_id)
-        <span class="pl-k">REFERENCES</span> gene(gene_id),
+        <span class="pl-k">REFERENCES</span> gene(gene_id)
+        <span class="pl-k">ON DELETE CASCADE</span>,
     <span class="pl-k">CONSTRAINT</span> fk_assoc_panel_id <span class="pl-k">FOREIGN KEY</span> (assoc_panel_id)
         <span class="pl-k">REFERENCES</span> panel_gene(panel_gene_id)
+        <span class="pl-k">ON DELETE CASCADE</span>
 )
 ENGINE<span class="pl-k">=</span>InnoDB;          </pre></div>
 
@@ -1187,10 +1194,12 @@ ENGINE<span class="pl-k">=</span>InnoDB;          </pre></div>
     examen_panel_gene_id <span class="pl-k">INT</span> UNSIGNED <span class="pl-k">NOT NULL</span>,
     <span class="pl-k">CONSTRAINT</span> fk_patient_id
         <span class="pl-k">FOREIGN KEY</span> (examen_patient_id) 
-        <span class="pl-k">REFERENCES</span> patient(patient_id),
+        <span class="pl-k">REFERENCES</span> patient(patient_id)
+        <span class="pl-k">ON DELETE CASCADE</span>,
     <span class="pl-k">CONSTRAINT</span> fk_panel_gene_id
         <span class="pl-k">FOREIGN KEY</span> (examen_panel_gene_id) 
         <span class="pl-k">REFERENCES</span> panel_gene(panel_gene_id)
+        <span class="pl-k">ON DELETE</span> <span class="pl-k">SET</span> <span class="pl-k">NULL</span>
 )
 ENGINE<span class="pl-k">=</span>InnoDB;          </pre></div>
 
@@ -1236,10 +1245,12 @@ ENGINE<span class="pl-k">=</span>InnoDB;          </pre></div>
     rapport_prescripteur_id <span class="pl-k">INT</span> UNSIGNED <span class="pl-k">NOT NULL</span>,
     <span class="pl-k">CONSTRAINT</span> fk_examen_id
         <span class="pl-k">FOREIGN KEY</span> (rapport_examen_id) 
-        <span class="pl-k">REFERENCES</span> examen(examen_id),
+        <span class="pl-k">REFERENCES</span> examen(examen_id)
+        <span class="pl-k">ON DELETE CASCADE</span>,
     <span class="pl-k">CONSTRAINT</span> fk_prescripteur_id
         <span class="pl-k">FOREIGN KEY</span> (rapport_prescripteur_id) 
         <span class="pl-k">REFERENCES</span> personnel(personnel_id)
+        <span class="pl-k">ON DELETE</span> <span class="pl-k">SET</span> <span class="pl-k">NULL</span>
 )
 ENGINE<span class="pl-k">=</span>InnoDB;          </pre></div>
 </article></body></html>

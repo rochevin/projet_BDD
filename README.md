@@ -41,14 +41,13 @@ CREATE TABLE personnel (
     personnel_identifiant VARCHAR(60) NOT NULL,
     personnel_password CHAR(40) CHARACTER SET ASCII NOT NULL,
     personnel_type_personnel_id INT UNSIGNED NOT NULL,
-    UNIQUE KEY personnel_uni_mail (personnel_mail),
     UNIQUE KEY personnel_uni_identifiant (personnel_identifiant),
     CONSTRAINT fk_type_personnel_id
         FOREIGN KEY (personnel_type_personnel_id) 
         REFERENCES type_personnel(type_personnel_id)
         ON DELETE SET NULL
 )
-ENGINE=InnoDB DEFAULT CHARSET=utf8;          
+ENGINE=InnoDB DEFAULT CHARSET=utf8;        
 ```
 ## Table `patient`
 ###Description
@@ -91,10 +90,7 @@ CREATE TABLE patient (
         REFERENCES personnel(personnel_id)
         ON DELETE SET NULL   
 )
-ENGINE=InnoDB;  
---Création d'un index pour faciliter la recherche par nom
-CREATE INDEX ind_nom
-ON patient (patient_nom);        
+ENGINE=InnoDB;         
 ```
 
 ##Table `panel_gene`
@@ -153,7 +149,7 @@ CREATE TABLE assoc_panel_gene(
         REFERENCES panel_gene(panel_gene_id)
         ON DELETE CASCADE
 )
-ENGINE=InnoDB;          
+ENGINE=InnoDB;    
 ```
 
 ##Table `examen`

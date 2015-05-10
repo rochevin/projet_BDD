@@ -4,7 +4,8 @@ USE gestion_prescription;
 
 CREATE TABLE type_personnel (
     type_personnel_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    type_personnel_nom VARCHAR(60) NOT NULL
+    type_personnel_nom VARCHAR(60) NOT NULL,
+    type_personnel_rang INT UNSIGNED NOT NULL
 )
 ENGINE=InnoDB;  
 
@@ -115,6 +116,6 @@ CREATE TABLE rapport (
     CONSTRAINT fk_prescripteur_id
         FOREIGN KEY (rapport_prescripteur_id) 
         REFERENCES personnel(personnel_id)
-        ON DELETE SET NULL
+        ON DELETE CASCADE
 )
 ENGINE=InnoDB;  

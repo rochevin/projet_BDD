@@ -9,19 +9,20 @@ Le but de ce projet est de gérer des examens demandés par des prescripteurs. U
 #Création des tables
 ##Table `type_personnel`
 ###Description
-type_personnel_id | type_personnel_nom 
-:-----: | :------
-INT | VARCHAR
-1 | Administrateur
-2 | Préscripteur
-3 | Clinicien
+type_personnel_id | type_personnel_nom | type_personnel_rang
+:-----: | :-----: | :------
+INT | VARCHAR | INT
+1 | Administrateur | 1
+2 | Préscripteur | 2
+3 | Clinicien | 3
 
 
 ###Création de la table
 ``` sql
 CREATE TABLE type_personnel (
     type_personnel_id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    type_personnel_nom VARCHAR(60) NOT NULL
+    type_personnel_nom VARCHAR(60) NOT NULL,
+    type_personnel_rang INT UNSIGNED NOT NULL
 )
 ENGINE=InnoDB;          
 ```

@@ -70,6 +70,7 @@ CREATE TABLE examen (
     examen_nom VARCHAR(60) NOT NULL,
     examen_date DATE DEFAULT NULL,
     examen_pathologie VARCHAR(60) NOT NULL,
+    examen_commentaires TEXT,
     examen_patient_id INT UNSIGNED NOT NULL,
     examen_panel_gene_id INT UNSIGNED NOT NULL,
     examen_type_personnel_id INT UNSIGNED NOT NULL,

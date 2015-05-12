@@ -146,7 +146,7 @@ ALTER TABLE assoc_panel_gene ADD CONSTRAINT fk_assoc_panel_id FOREIGN KEY (assoc
 ##Table `examen`
 ###Description
 examen_id | examen_nom | examen_date | examen_pathologie | examen_commentaires | examen_patient_id | examen_panel_gene_id | examen_type_personnel_id
-:-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :------ 
+:-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :------ 
 INT | VARCHAR | DATE | VARCHAR | TEXT | INT | INT | INT
 
 

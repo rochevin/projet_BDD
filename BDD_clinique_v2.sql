@@ -1,13 +1,9 @@
--- Tables
--- -------
--- -------
--- Creation des tables : Examen, Patient, Personnel, Type_personnel, Gene, Panel et Panel_gene. 
 
 SET NAMES 'utf8';
---------------------------------------------------------------------------------------------------
+
 CREATE DATABASE clinique;
 USE clinique;
---------------------------------------------------------------------------------------------------
+
 CREATE TABLE Examen (
     examen_id INT UNSIGNED AUTO_INCREMENT,
     examen_nom VARCHAR(60) NOT NULL,
@@ -21,7 +17,7 @@ CREATE TABLE Examen (
 )
 ENGINE=InnoDB; 
 
-----------------------------------------------------------
+
 CREATE TABLE Patient (
     patient_id INT UNSIGNED AUTO_INCREMENT,
     patient_num_secu INT UNSIGNED NOT NULL,
@@ -38,7 +34,7 @@ CREATE TABLE Patient (
 )
 ENGINE=InnoDB;   
 
------------------------------------------------------------
+
 CREATE TABLE Personnel (
     personnel_id INT UNSIGNED AUTO_INCREMENT,
     personnel_prenom VARCHAR(60) NOT NULL,
@@ -58,7 +54,7 @@ CREATE TABLE Type_personnel (
 )
 ENGINE=InnoDB; 
 
-------------------------------------------------------------
+
 CREATE TABLE Gene (
     gene_id INT UNSIGNED AUTO_INCREMENT,
     gene_nom VARCHAR(60) NOT NULL,
@@ -80,14 +76,11 @@ CREATE TABLE Assoc_panel_gene(
     PRIMARY KEY (assoc_gene_id, assoc_panel_id)
 )
 ENGINE=InnoDB;  
----------------------------------------------------------------
 
--- Clés étrangères
--- ----------------
--- ----------------
-ALTER TABLE Patient 
-    ADD CONSTRAINT fk_pere_id FOREIGN KEY (patient_pere_id) REFERENCES Patient(patient_id);
-    ADD CONSTRAINT fk_mere_id FOREIGN KEY (patient_mere_id) REFERENCES Patient(patient_id);
+
+ALTER TABLE Patient ADD CONSTRAINT fk_pere_id FOREIGN KEY (patient_pere_id) REFERENCES Patient(patient_id);
+ALTER TABLE Patient ADD CONSTRAINT fk_mere_id FOREIGN KEY (patient_mere_id) REFERENCES Patient(patient_id);
+
 
        
 ALTER TABLE Personnel 
@@ -96,20 +89,16 @@ ALTER TABLE Personnel
     REFERENCES Type_personnel(type_personnel_id);  
   
 
-ALTER TABLE Assoc_panel_gene
-    ADD CONSTRAINT fk_assoc_gene_id FOREIGN KEY (assoc_gene_id) REFERENCES Gene(gene_id);
-    ADD CONSTRAINT fk_assoc_panel_id FOREIGN KEY (assoc_panel_id) REFERENCES Panel(panel_id);
+
+ALTER TABLE Assoc_panel_gene ADD CONSTRAINT fk_assoc_gene_id FOREIGN KEY (assoc_gene_id) REFERENCES Gene(gene_id);
+ALTER TABLE Assoc_panel_gene ADD CONSTRAINT fk_assoc_panel_id FOREIGN KEY (assoc_panel_id) REFERENCES Panel(panel_id);
 
 
-ALTER TABLE Examen 
-    ADD CONSTRAINT fk_patient_id FOREIGN KEY (examen_patient_id) REFERENCES Patient(patient_id);
-    ADD CONSTRAINT fk_panel_gene_id FOREIGN KEY (examen_panel_gene_id) REFERENCES Panel(panel_id);  
-    ADD CONSTRAINT fk_examen_type_personnel_id FOREIGN KEY (examen_type_personnel_id) REFERENCES Personnel(personnel_id);
 
-----------------------------------------------------------------
--- Index
--- ------
--- ------
+ALTER TABLE Examen ADD CONSTRAINT fk_patient_id FOREIGN KEY (examen_patient_id) REFERENCES Patient(patient_id);
+ALTER TABLE Examen ADD CONSTRAINT fk_panel_gene_id FOREIGN KEY (examen_panel_gene_id) REFERENCES Panel(panel_id);
+ALTER TABLE Examen ADD CONSTRAINT fk_examen_type_personnel_id FOREIGN KEY (examen_type_personnel_id) REFERENCES Personnel(personnel_id);
+
 
 CREATE UNIQUE INDEX patient_unique_email
 ON Patient(patient_mail);
@@ -124,5 +113,3 @@ CREATE INDEX nom_gene
 ON Gene(gene_nom);
 
 
----------------------------------------------------------------
--- Ajout données

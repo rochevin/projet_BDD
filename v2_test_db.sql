@@ -40,14 +40,14 @@ ENGINE=InnoDB;
 
 CREATE TABLE panel_gene (
     panel_gene_id INT UNSIGNED AUTO_INCREMENT,
-    panel_gene_nom VARCHAR(60) NOT NULL,
+    panel_gene_nom VARCHAR(30) NOT NULL,
     PRIMARY KEY (panel_gene_id)
 )
 ENGINE=InnoDB; 
 
 CREATE TABLE gene (
     gene_id INT UNSIGNED AUTO_INCREMENT,
-    gene_nom VARCHAR(60) NOT NULL,
+    gene_nom VARCHAR(10) NOT NULL,
     gene_chromosome CHAR(2) DEFAULT NULL,
     PRIMARY KEY (gene_id)
 )

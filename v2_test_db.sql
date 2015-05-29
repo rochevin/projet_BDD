@@ -80,7 +80,7 @@ CREATE TABLE examen (
     examen_commentaires TEXT,
     examen_patient_id INT UNSIGNED NOT NULL,
     examen_panel_gene_id INT UNSIGNED NOT NULL,
-    examen_type_personnel_id INT UNSIGNED NOT NULL,
+    examen_personnel_id INT UNSIGNED NOT NULL,
     PRIMARY KEY (examen_id)
 )
 ENGINE=InnoDB; 

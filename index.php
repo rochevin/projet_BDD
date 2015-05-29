@@ -33,9 +33,13 @@
                   <div class="panel-heading">
                     <h3 class="panel-title">Informations</h3>
                   </div>
-                  <div class="panel-body">
-                    Panel content
-                  </div>
+                    <ul class="list-group">
+                      <li class="list-group-item"><span class="badge">Administrateur</span>Status : </li>
+                      <li class="list-group-item"><a href="#" class="badge">23</a>Patients : </li>
+                      <li class="list-group-item">Mail : <a class="badge" href="mailto:george.michael@coucou.fr">george.michael@coucou.fr</a></li>
+                    </ul>
+                    
+                    
                 </div>
               </div>
             </div> <!-- cont.row1.col1.row2-->
@@ -48,9 +52,10 @@
                     <h3 class="panel-title">Panneau d'administration</h3>
                   </div>
                   <div class="panel-body panel_gestion">
-                    <a class="btn btn-danger btn-lg panel_button" href="#">Suprimmer </br>Prescripteur</a>
-                    <a class="btn btn-danger btn-lg panel_button" href="#">Suprimmer </br>Patient</a>
-                    <a class="btn btn-primary btn-lg panel_button" href="#">Ajouter </br>Prescripteur</a>
+                    <a class="btn btn-danger btn-lg panel_button" href="#"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></br>Prescripteur</a>
+                    <a class="btn btn-danger btn-lg panel_button" href="#"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></br>Patient</a>
+                    <a class="btn btn-primary btn-lg panel_button" href="#"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></br>Prescripteur</a>
+                    <a class="btn btn-primary btn-lg panel_button" href="#"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></br>Gène</a>
                   </div>
                 </div>
               </div> <!-- cont.row1.col2.row1-->

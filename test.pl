@@ -32,14 +32,14 @@ $r->load_registry_from_db(-host => "localhost", -user => "root", -pass => "root"
 # On utilise gene_adaptor pour récupérer les informations sur nos gènes
 my $gene_adaptor=$r->get_adaptor("Human" ,"core", "Gene");
 
+print file_out "INSERT INTO `gestion_prescription`.`gene` (`gene_id`, `gene_nom`, `gene_chromosome`)\nVALUES ";
 foreach my $id(keys %gene_list) {
 	my $gene = $gene_adaptor->fetch_by_stable_id($id);
 
 	my $name = $gene->external_name();
 	my $seq_region = $gene->seq_region_name();
 
-	print file_out "INSERT INTO `gestion_prescription`.`gene` (`gene_id`, `gene_nom`, `gene_chromosome`) VALUES (NULL, '$name', '$seq_region');\n";
-
+	print file_out "(NULL, '$name', '$seq_region'),\n";
 }
 
 close file_out;

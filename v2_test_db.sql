@@ -1,3 +1,9 @@
+SET NAMES 'utf8';
+
+CREATE DATABASE gestion_prescription;
+
+USE gestion_prescription;
+
 CREATE TABLE type_personnel (
     type_personnel_id INT UNSIGNED AUTO_INCREMENT,
     type_personnel_nom VARCHAR(60) NOT NULL,
@@ -21,12 +27,11 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE patient (
     patient_id INT UNSIGNED AUTO_INCREMENT,
-    patient_num_secu INT UNSIGNED NOT NULL,
+    patient_num_secu BIGINT UNSIGNED NOT NULL,
     patient_prenom VARCHAR(60) NOT NULL,
     patient_nom VARCHAR(60) NOT NULL,
     patient_mail VARCHAR(100) DEFAULT NULL,
     patient_sexe VARCHAR(10) DEFAULT NULL,
-    patient_ethnie VARCHAR(60) DEFAULT NULL,
     patient_date_naissance DATE DEFAULT NULL,
     patient_num_tel VARCHAR(10) DEFAULT NULL,
     patient_pere_id INT UNSIGNED DEFAULT NULL,
@@ -53,6 +58,8 @@ CREATE TABLE gene (
 )
 ENGINE=InnoDB;   
 
+CREATE INDEX nom_gene
+ON Gene(gene_nom);
 
 
 CREATE TABLE assoc_panel_gene(
@@ -105,3 +112,146 @@ ALTER TABLE examen ADD CONSTRAINT fk_panel_gene_id
 ALTER TABLE examen ADD CONSTRAINT fk_examen_type_personnel_id
         FOREIGN KEY (examen_type_personnel_id) 
         REFERENCES personnel(personnel_id);
+
+
+
+INSERT INTO `gestion_prescription`.`gene` (`gene_id`, `gene_nom`, `gene_chromosome`)
+VALUES (NULL, 'DHX33', '17'),
+(NULL, 'DPM1', '20'),
+(NULL, 'UPF1', '19'),
+(NULL, 'ACSM3', '16'),
+(NULL, 'CFLAR', '2'),
+(NULL, 'RBM6', '3'),
+(NULL, 'LASP1', '17'),
+(NULL, 'PDK4', '7'),
+(NULL, 'CCDC109B', '4'),
+(NULL, 'KLHL13', 'X'),
+(NULL, 'SLC25A5', 'X'),
+(NULL, 'HCCS', 'X'),
+(NULL, 'ARF5', '7'),
+(NULL, 'TNMD', 'X'),
+(NULL, 'CYP26B1', '2'),
+(NULL, 'STPG1', '1'),
+(NULL, 'GCLC', '6'),
+(NULL, 'CROT', '7'),
+(NULL, 'MAD1L1', '7'),
+(NULL, 'AC004381.6', '16'),
+(NULL, 'POLR2J', '7'),
+(NULL, 'PRSS22', '16'),
+(NULL, 'CYP51A1', '7'),
+(NULL, 'ALS2', '2'),
+(NULL, 'ABCB5', '7'),
+(NULL, 'CALCR', '7'),
+(NULL, 'BZRAP1', '17'),
+(NULL, 'NIPAL3', '1'),
+(NULL, 'CFTR', '7'),
+(NULL, 'NDUFAF7', '2'),
+(NULL, 'ABCB4', '7'),
+(NULL, 'HSPB6', '19'),
+(NULL, 'HOXA11', '7'),
+(NULL, 'NFYA', '6'),
+(NULL, 'TFPI', '2'),
+(NULL, 'FKBP4', '12'),
+(NULL, 'GCFC2', '2'),
+(NULL, 'CDC27', '17'),
+(NULL, 'M6PR', '12'),
+(NULL, 'AK2', '1'),
+(NULL, 'NDUFAB1', '16'),
+(NULL, 'ICA1', '7'),
+(NULL, 'BAD', '11'),
+(NULL, 'SARM1', '17'),
+(NULL, 'AOC1', '7'),
+(NULL, 'MSL3', 'X'),
+(NULL, 'MTMR7', '8'),
+(NULL, 'LIG3', '17'),
+(NULL, 'CD38', '4'),
+(NULL, 'FUCA2', '6'),
+(NULL, 'ARHGAP33', '19'),
+(NULL, 'WNT16', '7'),
+(NULL, 'CREBBP', '16'),
+(NULL, 'HS3ST1', '4'),
+(NULL, 'COPZ2', '17'),
+(NULL, 'SNX11', '17'),
+(NULL, 'C1orf112', '1'),
+(NULL, 'ST7', '7'),
+(NULL, 'DBNDD1', '16'),
+(NULL, 'ENPP4', '6'),
+(NULL, 'PON1', '7'),
+(NULL, 'SLC22A16', '6'),
+(NULL, 'TMEM176A', '7'),
+(NULL, 'RECQL', '12'),
+(NULL, 'CFH', '1'),
+(NULL, 'CD99', 'X'),
+(NULL, 'LAS1L', 'X'),
+(NULL, 'RBM5', '3'),
+(NULL, 'HECW1', '7'),
+(NULL, 'SLC4A1', '17'),
+(NULL, 'CASP10', '2'),
+(NULL, 'KMT2E', '7'),
+(NULL, 'CIAPIN1', '16'),
+(NULL, 'RAD52', '12'),
+(NULL, 'MEOX1', '17'),
+(NULL, 'DVL2', '17'),
+(NULL, 'RHBDD2', '7'),
+(NULL, 'PRKAR2B', '7'),
+(NULL, 'MPO', '17'),
+(NULL, 'ARX', 'X'),
+(NULL, 'FGR', '1'),
+(NULL, 'POLDIP2', '17'),
+(NULL, 'FAM214B', '9'),
+(NULL, 'LAP3', '4'),
+(NULL, 'THSD7A', '7'),
+(NULL, 'KDM1A', '1'),
+(NULL, 'RPAP3', '12'),
+(NULL, 'SEMA3F', '3'),
+(NULL, 'KRIT1', '7'),
+(NULL, 'WDR54', '2'),
+(NULL, 'PLXND1', '3'),
+(NULL, 'ZMYND10', '3'),
+(NULL, 'SKAP2', '7'),
+(NULL, 'SLC7A2', '8'),
+(NULL, 'CCDC132', '7'),
+(NULL, 'SLC25A13', '7'),
+(NULL, 'TSPAN6', 'X'),
+(NULL, 'SCYL3', '1'),
+(NULL, 'ANKIB1', '7'),
+(NULL, 'CAMKK1', '17');
+
+INSERT INTO `gestion_prescription`.`patient` (`patient_id`, `patient_num_secu`, `patient_prenom`, `patient_nom`, `patient_mail`, `patient_sexe`, `patient_date_naissance`, `patient_num_tel`, `patient_pere_id`, `patient_mere_id`)
+VALUES (NULL, '372542127966880', 'Leo', 'Giles', 'leo.giles@cc.fr', 'Homme', '1960-06-20', '0772964051', NULL, NULL),
+(NULL,'458268732763829','Georgia','Richardson','georgia.richardson@cc.fr','Femme','1955-09-09','0772964051',NULL,NULL),
+(NULL,'893529274035245','Janna','Sampson','janna.sampson@cc.fr','Femme','1987-01-26','0786477306',NULL,NULL),
+(NULL,'719790315255522','Gareth','Pitts','gareth.pitts@cc.fr','Homme','1981-12-03','0613702578',NULL,NULL),
+(NULL,'839999704621732','Madison','Galloway','madison.galloway@cc.fr','Femme','1988-03-28','0830188914',NULL,NULL),
+(NULL,'381287971977144','Justin','Powers','justin.powers@cc.fr','Homme','1957-05-19','0746191789',NULL,NULL),
+(NULL,'179723885841667','Grace','Bowers','grace.bowers@cc.fr','Femme','1969-01-31','0438077027',NULL,NULL),
+(NULL,'910394249018281','Ignacia','Henry','ignacia.henry@cc.fr','Femme','1989-02-26','0407291039',NULL,NULL),
+(NULL,'215397845953702','Kenneth','Mckenzie','kenneth.mckenzie@cc.fr','Femme','2012-06-07','0799916749',NULL,NULL),
+(NULL,'386237485334277','Christian','Watson','christian.watson@cc.fr','Homme','1959-05-05','0602613645',NULL,NULL),
+(NULL,'375898923724889','Ulla','Torres','ulla.torres@cc.fr','Femme','1970-08-11','0144847210',NULL,NULL),
+(NULL,'293753291014581','Mia','Jacobs','mia.jacobs@cc.fr','Femme','2005-10-28','0214475100',NULL,NULL),
+(NULL,'343134348746389','Channing','Marsh','channing.marsh@cc.fr','Femme','2000-06-20','0951940825',NULL,NULL),
+(NULL,'638697972055524','Althea','Best','althea.best@cc.fr','Femme','1982-03-22','0764741765',NULL,NULL),
+(NULL,'582508681342005','Ebony','Ortega','ebony.ortega@cc.fr','Femme','1946-09-10','0209455023',NULL,NULL),
+(NULL,'902086384594446','Felix','Becker','felix.becker@cc.fr','Homme','1981-12-26','0339079079',NULL,NULL),
+(NULL,'303165260236710','Guy','Flynn','guy.flynn@cc.fr','Homme','2005-08-31','0783249241',NULL,NULL),
+(NULL,'683669000398367','Sean','Donovan','sean.donovan@cc.fr','Homme','1986-11-23','0997975598',NULL,NULL),
+(NULL,'293784618377685','Hector','Sampson','hector.sampson@cc.fr','Homme','1985-01-26','0238506015',NULL,NULL),
+(NULL,'790227639023214','Anna','Giles','anna.giles@cc.fr','Femme','1967-01-13','0459951824',NULL,NULL),
+(NULL,'491160103119908','John','Richardson','john.richardson@cc.fr','Homme','1947-03-25','0220867353',NULL,NULL),
+(NULL,'260590809863060','Elisa','Pitts','elisa.pitts@cc.fr','Femme','1984-07-06','0494560812',NULL,NULL),
+(NULL,'887728589586913','George','Torres','george.torres@cc.fr','Homme','1964-06-02','0219527916',NULL,NULL),
+(NULL,'293784618377685','Richard','Sampson','richard.sampson@cc.fr','Homme','2014-01-13',NULL,'19','3'),
+(NULL,'293784618377685','Jenna','Sampson','jenna.sampson@cc.fr','Femme','2007-05-11',NULL,'19','3'),
+(NULL,'984132010489704','Isabelle','Giles','isabelle.giles@cc.fr','Femme','1983-01-13','0538534932','1','20'),
+(NULL,'585501230321824','Allan','Richardson','allan.richardson@cc.fr','Homme','1972-03-25','0119335695','21','2'),
+(NULL,'260590809863060','Vincent','Pitts','vincent.pitts@cc.fr','Homme','2002-05-01',NULL,'4','22'),
+(NULL,'302256620023399','Simon','Torres','simon.torres@cc.fr','Homme','1984-06-14','0219527916','23','11');
+
+
+
+INSERT INTO `gestion_prescription`.`panel_gene` (`panel_gene_id`, `panel_gene_nom`) VALUES (NULL, 'cancer_sein');
+INSERT INTO `gestion_prescription`.`assoc_panel_gene` (`assoc_gene_id`, `assoc_panel_id`) 
+VALUES ('1', '2'),
+('2', '2'),
+('3', '2');

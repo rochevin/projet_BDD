@@ -1,23 +1,4 @@
-<!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="shortcut icon" href="images/logo.png">
-
-    <title>Hopital Core Database</title>
-
-    <link href="bootstrap-3.3.4-dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="bootstrap-3.3.4-dist/css/style.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Marvel:400,700' rel='stylesheet' type='text/css'>
-  </head>
-  <body>
-      <div class="container-fluid"> <!-- DEBUT CONTAINER cont-->
-        <div class="row"> <!-- DEBUT NAVBAR cont.navbar-->
-          <?php include('navbar.php'); ?>
-        </div> <!-- FIN NAVBAR -->
+<?php include('header.php'); ?>
         <div class="row" id="first_line"> <!-- DEBUT PREMIERE LIGNE cont.row1-->
           <div class="col-lg-3 col-lg-offset-1"> <!-- cont.row1.col1-->
             <div class="row"> <!-- cont.row1.col1.row1-->
@@ -82,14 +63,4 @@
             </div>
           </div><!-- cont.row1.col2-->
         </div> <!-- FIN PREMIERE LIGNE -->
-        <div class="row"> <!-- DEBUT FOOTER -->
-          <?php include('footer.php'); ?>
-        </div> <!-- FIN FOOTER -->
-      </div> <!-- FIN CONTAINER -->
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <script src="bootstrap-3.3.4-dist/js/jquery-1.11.3.js"></script>
-    <script src="bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
-  </body>
-</html>
+<?php include('footer.php'); ?>

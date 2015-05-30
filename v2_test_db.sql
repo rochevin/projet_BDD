@@ -114,6 +114,12 @@ ALTER TABLE examen ADD CONSTRAINT fk_examen_type_personnel_id
         REFERENCES personnel(personnel_id);
 
 
+INSERT INTO `gestion_prescription`.`type_personnel` (`type_personnel_id`, `type_personnel_nom`, `type_personnel_rang`) VALUES (NULL, 'Administrateur', '1'),
+    (NULL, 'Prescripteur', '2');
+
+
+INSERT INTO `gestion_prescription`.`personnel` (`personnel_id`, `personnel_prenom`, `personnel_nom`, `personnel_mail`, `personnel_password`, `personnel_type_personnel_id`) VALUES (NULL, 'George', 'Michael', 'george.michael@cc.fr', '5ed25af7b1ed23fb00122e13d7f74c4d8262acd8', '1');
+
 
 INSERT INTO `gestion_prescription`.`gene` (`gene_id`, `gene_nom`, `gene_chromosome`)
 VALUES (NULL, 'DHX33', '17'),
@@ -252,6 +258,6 @@ VALUES (NULL, '372542127966880', 'Leo', 'Giles', 'leo.giles@cc.fr', 'Homme', '19
 
 INSERT INTO `gestion_prescription`.`panel_gene` (`panel_gene_id`, `panel_gene_nom`) VALUES (NULL, 'cancer_sein');
 INSERT INTO `gestion_prescription`.`assoc_panel_gene` (`assoc_gene_id`, `assoc_panel_id`) 
-VALUES ('1', '2'),
-('2', '2'),
-('3', '2');
+VALUES ('1', '1'),
+('2', '1'),
+('3', '1');

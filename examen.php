@@ -87,8 +87,8 @@ $reponse->closeCursor();
 									</div>
 								</div>
 								<div class="form-group">
-									<div class="col-md-12 text-right">
-										<button class="btn btn-primary btn-lg" type="submit" ><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> Créer l'examen</button>
+									<div class="col-md-8 col-md-offset-2">
+										<button class="btn btn-primary btn-lg btn-block" type="submit" ><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> Créer l'examen</button>
 									</div>
 								</div>
  							</div>

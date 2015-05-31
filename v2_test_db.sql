@@ -41,14 +41,17 @@ CREATE TABLE patient (
 )
 ENGINE=InnoDB;   
 
-
+CREATE INDEX nom_prenom_patient
+ON patient(patient_nom,patient_prenom);
 
 CREATE TABLE panel_gene (
     panel_gene_id INT UNSIGNED AUTO_INCREMENT,
     panel_gene_nom VARCHAR(30) NOT NULL,
+    UNIQUE KEY panel_gene_uni_nom (panel_gene_nom),
     PRIMARY KEY (panel_gene_id)
 )
 ENGINE=InnoDB; 
+
 
 CREATE TABLE gene (
     gene_id INT UNSIGNED AUTO_INCREMENT,
@@ -59,7 +62,7 @@ CREATE TABLE gene (
 ENGINE=InnoDB;   
 
 CREATE INDEX nom_gene
-ON Gene(gene_nom);
+ON gene(gene_nom);
 
 
 CREATE TABLE assoc_panel_gene(
@@ -109,8 +112,8 @@ ALTER TABLE examen ADD CONSTRAINT fk_patient_id
 ALTER TABLE examen ADD CONSTRAINT fk_panel_gene_id
         FOREIGN KEY (examen_panel_gene_id) 
         REFERENCES panel_gene(panel_gene_id);  
-ALTER TABLE examen ADD CONSTRAINT fk_examen_type_personnel_id
-        FOREIGN KEY (examen_type_personnel_id) 
+ALTER TABLE examen ADD CONSTRAINT fk_examen_personnel_id
+        FOREIGN KEY (examen_personnel_id) 
         REFERENCES personnel(personnel_id);
 
 

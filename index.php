@@ -1,10 +1,26 @@
+<?php include('connexion.php'); ?>
+<?php session_start(); ?>
+
+<?php include('verification.php');?>
+<?php 
+$req_exam = $bdd->prepare("SELECT COUNT(`examen_id`) AS nombre_exam FROM `gestion_prescription`.`examen` WHERE `examen_personnel_id`=:utilisateur_id;");
+//On execute
+$req_exam->execute(array(
+  'utilisateur_id' => $_SESSION['id']
+));
+$resultat_exam = $req_exam->fetch();
+$req_exam->closeCursor();
+
+?>
+
+<?php if ($resultat) { ?>
 <?php include('header.php'); ?>
         <div class="row" id="first_line"> <!-- DEBUT PREMIERE LIGNE cont.row1-->
           <div class="col-lg-3 col-lg-offset-1"> <!-- cont.row1.col1-->
             <div class="row"> <!-- cont.row1.col1.row1-->
               <div class="col-lg-12">
                 <ul class="list-group">
-                  <li class="list-group-item"><h4><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Dr. George Michael</h4></li>
+                  <li class="list-group-item"><h4><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Dr. <?php echo $_SESSION['prenom']." ".$_SESSION['nom']; ?></h4></li>
                 </ul>
               </div>
             </div> <!-- cont.row1.col1.row1-->
@@ -15,9 +31,9 @@
                     <h3 class="panel-title">Informations</h3>
                   </div>
                     <ul class="list-group">
-                      <li class="list-group-item"><span class="badge">Administrateur</span>Status : </li>
-                      <li class="list-group-item"><a href="#" class="badge">23</a>Patients : </li>
-                      <li class="list-group-item">Mail : <a class="badge" href="mailto:george.michael@coucou.fr">george.michael@coucou.fr</a></li>
+                      <li class="list-group-item"><span class="badge"><?php echo $_SESSION['type']; ?></span>Status : </li>
+                      <li class="list-group-item"><a href="search_exam.php" class="badge"><?php echo $resultat_exam['nombre_exam']; ?></a>Examens : </li>
+                      <li class="list-group-item">Mail : <a class="badge" href="mailto:<?php echo $_SESSION['email']; ?>"><?php echo $_SESSION['email']; ?></a></li>
                     </ul>
                     
                     
@@ -27,6 +43,7 @@
           </div> <!-- cont.row1.col1-->
           <div class="col-lg-5"><!-- cont.row1.col2-->
             <div class="col-lg-12">
+            <?php if ($_SESSION['rang']==1) { ?>
               <div class="row"> <!-- cont.row1.col2.row1-->
                 <div class="panel panel-default">
                   <div class="panel-heading">
@@ -40,6 +57,7 @@
                   </div>
                 </div>
               </div> <!-- cont.row1.col2.row1-->
+              <?php } ?>
               <div class="row"> <!-- cont.row1.col2.row2-->
                 <div class="panel panel-default">
                   <div class="panel-heading">
@@ -64,3 +82,4 @@
           </div><!-- cont.row1.col2-->
         </div> <!-- FIN PREMIERE LIGNE -->
 <?php include('footer.php'); ?>
+<?php } //La fin du if ?>

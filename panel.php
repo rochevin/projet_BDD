@@ -2,49 +2,46 @@
 <?php include('connexion.php'); ?>
 <?php include('verification.php');?>
 
-<?php if ($resultat) { ?>
-	<?php
-
-	if (!empty($var) && count($_POST)>2) { //Si le nom panel_name existe et que POST contient au moins un gene plus le nom du panel, on peut executer la requête
-		//On met affichage à 1 pour afficher le résultat de l'insertion sur la page
-		$affichage = 1;
-		//On récupère le nom du panel, et on échappe les caractères
-		$nom_panel = htmlspecialchars($_POST['panel_name']);
-		unset($_POST['panel_name']);
-		//On détermine le nombre de gènes à ajouter dans le panel
-		$nombre_genes = count($_POST);
-		//On prépare la requête d'insertion qui va créer le nouveau panel
-		$req_one = $bdd->prepare("INSERT INTO `gestion_prescription`.`panel_gene` (`panel_gene_id`, `panel_gene_nom`) VALUES (NULL, :panel_name);");
-		//On execute
-		$req_one->execute(array(
-			'panel_name' => $nom_panel
+<?php if ($resultat) { 
+if (!empty($_POST['panel_name']) && count($_POST)>2) { //Si le nom panel_name existe et que POST contient au moins un gene plus le nom du panel, on peut executer la requête
+	//On met affichage à 1 pour afficher le résultat de l'insertion sur la page
+	$affichage = 1;
+	//On récupère le nom du panel, et on échappe les caractères
+	$nom_panel = htmlspecialchars($_POST['panel_name']);
+	unset($_POST['panel_name']);
+	//On détermine le nombre de gènes à ajouter dans le panel
+	$nombre_genes = count($_POST);
+	//On prépare la requête d'insertion qui va créer le nouveau panel
+	$req_one = $bdd->prepare("INSERT INTO `gestion_prescription`.`panel_gene` (`panel_gene_id`, `panel_gene_nom`) VALUES (NULL, :panel_name);");
+	//On execute
+	$req_one->execute(array(
+		'panel_name' => $nom_panel
+	));
+	$req_one->closeCursor();
+	//On récupère l'id du panel nouvellement créer
+	$panel_id = $bdd->lastInsertId();
+	$req_two = $bdd->prepare("INSERT INTO `gestion_prescription`.`assoc_panel_gene` (`assoc_gene_id`, `assoc_panel_id`) VALUES (:gene_id, :panel_id);");
+	foreach($_POST as $key => $val) {
+		$gene_id = intval(htmlspecialchars($val));
+		$req_two->execute(array(
+			'gene_id' => $gene_id,
+			'panel_id' => $panel_id				
 		));
-		$req_one->closeCursor();
-		//On récupère l'id du panel nouvellement créer
-		$panel_id = $bdd->lastInsertId();
-		$req_two = $bdd->prepare("INSERT INTO `gestion_prescription`.`assoc_panel_gene` (`assoc_gene_id`, `assoc_panel_id`) VALUES (:gene_id, :panel_id);");
-		foreach($_POST as $key => $val) {
-			$gene_id = intval(htmlspecialchars($val));
-			$req_two->execute(array(
-				'gene_id' => $gene_id,
-				'panel_id' => $panel_id				
-			));
-		} 
-		$req_two->closeCursor();
-	}
-
-	//On récupère tous les gènes de la base
-	$sql = "SELECT gene_id,gene_nom,gene_chromosome FROM gestion_prescription.gene;";
-	$reponse = $bdd->query($sql);
-	$rows = $reponse->fetchAll();
-	//On parcours les éléments de la requête, et on récupère les chromosomes pour le tri
-	foreach ($rows as $row){
-	    $chromosome_list[$row['gene_chromosome']] = '';
-	}
-	//On tri les chromosomes dans le bon ordre pour l'affichage
-	ksort($chromosome_list);
-	$reponse->closeCursor();
-	?>
+	} 
+	$req_two->closeCursor();
+}
+//On récupère tous les gènes de la base
+$sql = "SELECT gene_id,gene_nom,gene_chromosome FROM `gestion_prescription`.`gene`;";
+$reponse = $bdd->query($sql);
+$rows = $reponse->fetchAll();
+//On parcours les éléments de la requête, et on récupère les chromosomes pour le tri
+foreach ($rows as $row){
+    $chromosome_list[$row['gene_chromosome']] = '';
+}
+//On tri les chromosomes dans le bon ordre pour l'affichage
+ksort($chromosome_list);
+$reponse->closeCursor();
+?>
 
 
 	<?php include('header.php'); ?>

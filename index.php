@@ -182,6 +182,7 @@ if (isset($_POST['add_gene'])) {
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+            <a href="search_exam.php" class="btn btn-success"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Voir tous les examens</a>
             <button type="submit" name="see_exam" value="see_exam" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Voir l'examen</button>
           </div>
         </form>

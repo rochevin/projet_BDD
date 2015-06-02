@@ -6,7 +6,7 @@
 	<?php 
 	$id_exam = intval(htmlspecialchars($_GET['id']));
 	//Requête pour récupérer les informations sur l'examen, sur le prescripteur qui a réalisé l'examen et sur le patient
-	$req_one = $bdd->prepare("SELECT `examen`.`examen_nom`,`examen`.`examen_date`,`examen`.`examen_pathologie`,`examen`.`examen_commentaires`, `patient`.`patient_nom`,`patient`.`patient_prenom`,`patient`.`patient_sexe`,`patient`.`patient_date_naissance`, `personnel`.`personnel_nom`,`personnel`.`personnel_prenom`,`personnel`.`personnel_mail` FROM `gestion_prescription`.`examen` INNER JOIN `gestion_prescription`.`patient` ON `examen_patient_id`=`patient_id` INNER JOIN `gestion_prescription`.`personnel` ON `examen_personnel_id`=`personnel_id` WHERE `examen_id`=:id_exam AND `examen_personnel_id`=:id_prescripteur;");
+	$req_one = $bdd->prepare("SELECT `examen`.`examen_nom`,`examen`.`examen_date`,`examen`.`examen_pathologie`,`examen`.`examen_commentaires`, `examen`.`examen_panel_gene_id`,`patient`.`patient_num_secu` ,`patient`.`patient_nom`,`patient`.`patient_prenom`,`patient`.`patient_sexe`,`patient`.`patient_date_naissance`, `patient`.`patient_mail`, `patient`.`patient_num_tel`, `personnel`.`personnel_nom`,`personnel`.`personnel_prenom`,`personnel`.`personnel_mail` FROM `gestion_prescription`.`examen` INNER JOIN `gestion_prescription`.`patient` ON `examen_patient_id`=`patient_id` INNER JOIN `gestion_prescription`.`personnel` ON `examen_personnel_id`=`personnel_id` WHERE `examen_id`=:id_exam AND `examen_personnel_id`=:id_prescripteur;");
 	$req_one->execute(array(
 			'id_exam' => $id_exam,
 			'id_prescripteur' => $_SESSION['id']
@@ -15,12 +15,12 @@
 	$personnel_nom = $row_informations['personnel_nom'];
 	$personnel_prenom = $row_informations['personnel_prenom'];
 	$personnel_mail = $row_informations['personnel_mail'];
-
+	$id_panel = $row_informations['examen_panel_gene_id'];
 	$req_one->closeCursor();
 	//Requête pour récuperer les gènes du panel liés à l'examen (sans le nom du panel)
 	$req_two = $bdd->prepare("SELECT `gene`.`gene_nom` FROM `gestion_prescription`.`assoc_panel_gene` INNER JOIN `gestion_prescription`.`gene` ON `assoc_panel_gene`.`assoc_gene_id`=`gene`.`gene_id` WHERE `assoc_panel_id`=:id_panel;");
 	$req_two->execute(array(
-			'id_panel' => 1
+			'id_panel' => $id_panel
 		));
 	$rows_gene = $req_two->fetchAll();
 	$req_two->closeCursor();
@@ -88,12 +88,24 @@
 														<td><?php echo $row_informations['patient_nom']." ".$row_informations['patient_prenom']; ?></td>
 													</tr>
 													<tr>
+														<td><strong>Numéro de sécu :</strong></td>
+														<td><?php echo $row_informations['patient_num_secu']; ?></td>
+													</tr>
+													<tr>
 														<td><strong>Sexe :</strong></td>
 														<td><?php echo $row_informations['patient_sexe']; ?></td>
 													</tr>
 													<tr>
 														<td><strong>Date de naissance :</strong></td>
 														<td><?php echo $row_informations['patient_date_naissance']; ?></td>
+													</tr>
+													<tr>
+														<td><strong>Email :</strong></td>
+														<td><a href="mailto:<?php echo $row_informations['patient_mail']; ?>"><?php echo $row_informations['patient_mail']; ?></a></td>
+													</tr>
+													<tr>
+														<td><strong>Numéro tel :</strong></td>
+														<td><?php echo $row_informations['patient_num_tel']; ?></td>
 													</tr>
 												</tbody>
 											</table>

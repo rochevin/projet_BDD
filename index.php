@@ -1,5 +1,11 @@
-<?php include('connexion.php'); ?>
 <?php session_start(); ?>
+<?php include('connexion.php'); ?>
+<?php if ((isset($_GET['action'])) && ($_GET['action'] == 'deconnexion'))
+  {
+    $_SESSION = array();
+    session_destroy();
+  }
+?>
 
 <?php include('verification.php');?>
 <?php 

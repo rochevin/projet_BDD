@@ -20,7 +20,12 @@
 						</div>
 						<table class="table table-striped table-bordered">
 							<thead>
-								
+								<tr>
+									<td><strong>Nom</strong></td>
+									<td><strong>Date</strong></td>
+									<td><strong>Pathologie</strong></td>
+									<td><strong>Nom du patient</strong></td>
+								</tr>
 							</thead>
 							<tbody>
 								<?php while ($row = $req_exam->fetch()) { ?>

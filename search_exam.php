@@ -28,7 +28,7 @@
 										<td><a href="page_examen.php?id=<?php echo $row['examen_id']; ?>"><?php echo $row['examen_nom']; ?></a></td>
 										<td><a href="page_examen.php?id=<?php echo $row['examen_id']; ?>"><?php echo $row['examen_date']; ?></a></td>
 										<td><a href="page_examen.php?id=<?php echo $row['examen_id']; ?>"><?php echo $row['examen_pathologie']; ?></a></td>
-										<td><a href="page_examen.php?id=<?php echo $row['examen_id']; ?>"><?php echo $row['patient_prenom']." ".$row['patient_prenom']; ?></a></td>
+										<td><a href="page_examen.php?id=<?php echo $row['examen_id']; ?>"><?php echo $row['patient_prenom']." ".$row['patient_nom']; ?></a></td>
 									</tr>
 								<?php } 
 								$req_exam->closeCursor(); ?>

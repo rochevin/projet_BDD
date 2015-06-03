@@ -19,6 +19,7 @@ CREATE TABLE personnel (
     personnel_mail VARCHAR(100) DEFAULT NULL,
     personnel_password CHAR(40) CHARACTER SET ASCII NOT NULL,
     personnel_type_personnel_id INT UNSIGNED NOT NULL,
+    personnel_actif BOOLEAN DEFAULT '0' NOT NULL,
     UNIQUE KEY personnel_uni_mail (personnel_mail),
     PRIMARY KEY (personnel_id)
 )
@@ -33,9 +34,11 @@ CREATE TABLE patient (
     patient_mail VARCHAR(100) DEFAULT NULL,
     patient_sexe CHAR(1) DEFAULT NULL,
     patient_date_naissance DATE DEFAULT NULL,
+    patient_date_deces DATE DEFAULT NULL,
     patient_num_tel VARCHAR(10) DEFAULT NULL,
     patient_pere_id INT UNSIGNED DEFAULT NULL,
     patient_mere_id INT UNSIGNED DEFAULT NULL,
+    patient_actif BOOLEAN DEFAULT '0' NOT NULL,
     UNIQUE KEY patient_uni_mail (patient_mail),
     PRIMARY KEY (patient_id)
 )

@@ -1,11 +1,13 @@
 SET NAMES 'utf8';
 
-CREATE DATABASE gestion_prescription;
+/* Création de la base */
+CREATE DATABASE gestion_prescription; 
 
-USE gestion_prescription;
+USE gestion_prescription; /* Changement de base de données dans MySQL */
 
-CREATE TABLE type_personnel (
-    type_personnel_id INT UNSIGNED AUTO_INCREMENT,
+/* Création des tables */
+CREATE TABLE type_personnel ( 
+    type_personnel_id INT UNSIGNED AUTO_INCREMENT, /* Clef primaire auto-incrémentée */
     type_personnel_nom VARCHAR(60) NOT NULL,
     type_personnel_rang INT UNSIGNED NOT NULL,
     PRIMARY KEY (type_personnel_id)
@@ -44,7 +46,7 @@ CREATE TABLE patient (
 )
 ENGINE=InnoDB;   
 
-CREATE INDEX nom_prenom_patient
+CREATE INDEX nom_prenom_patient /* Permet une recher rapide des patients par leur nom et prénom */
 ON patient(patient_nom,patient_prenom);
 
 CREATE TABLE panel_gene (
@@ -68,7 +70,7 @@ CREATE INDEX nom_gene
 ON gene(gene_nom);
 
 
-CREATE TABLE assoc_panel_gene(
+CREATE TABLE assoc_panel_gene( /* Création dune table d'association avec pour particularité deux clefs primaires */
     assoc_gene_id INT UNSIGNED NOT NULL,
     assoc_panel_id INT UNSIGNED NOT NULL,
     CONSTRAINT pk_assoc PRIMARY KEY (assoc_gene_id,assoc_panel_id)
@@ -91,6 +93,7 @@ CREATE TABLE examen (
 )
 ENGINE=InnoDB; 
 
+/* Création des clefs étrangères */ 
 
 ALTER TABLE personnel ADD CONSTRAINT fk_type_personnel_id          
         FOREIGN KEY (personnel_type_personnel_id)           
@@ -119,7 +122,7 @@ ALTER TABLE examen ADD CONSTRAINT fk_examen_personnel_id
         FOREIGN KEY (examen_personnel_id) 
         REFERENCES personnel(personnel_id);
 
-
+/* Insertion de données */ 
 INSERT INTO `gestion_prescription`.`type_personnel` (`type_personnel_id`, `type_personnel_nom`, `type_personnel_rang`) VALUES (NULL, 'Administrateur', '1'),
     (NULL, 'Prescripteur', '2');
 

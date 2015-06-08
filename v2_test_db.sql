@@ -62,6 +62,7 @@ CREATE TABLE gene (
     gene_id INT UNSIGNED AUTO_INCREMENT,
     gene_nom VARCHAR(10) NOT NULL,
     gene_chromosome CHAR(2) DEFAULT NULL,
+    gene_actif BOOLEAN DEFAULT '0' NOT NULL,
     PRIMARY KEY (gene_id)
 )
 ENGINE=InnoDB;   

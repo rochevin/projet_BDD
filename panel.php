@@ -31,7 +31,7 @@ if (!empty($_POST['panel_name']) && count($_POST)>2) { //Si le nom panel_name ex
 	$req_two->closeCursor();
 }
 //On récupère tous les gènes de la base
-$sql = "SELECT gene_id,gene_nom,gene_chromosome FROM `gestion_prescription`.`gene`;";
+$sql = "SELECT gene_id,gene_nom,gene_chromosome FROM `gestion_prescription`.`gene` WHERE `gene_actif`= 0;";
 $reponse = $bdd->query($sql);
 $rows = $reponse->fetchAll();
 //On parcours les éléments de la requête, et on récupère les chromosomes pour le tri

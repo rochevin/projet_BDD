@@ -8,33 +8,69 @@
 ?>
 
 <?php include('verification.php');?>
-<?php 
-$req_exam = $bdd->prepare("SELECT `examen`.`examen_id`,`examen`.`examen_nom`,`patient`.`patient_nom`,`patient`.`patient_prenom` FROM `gestion_prescription`.`examen` INNER JOIN `gestion_prescription`.`patient` ON `examen`.`examen_patient_id`=`patient`.`patient_id` WHERE `examen_personnel_id`=1 ORDER BY `examen_date` DESC;");
-//On execute
-$req_exam->execute(array(
-  'utilisateur_id' => $_SESSION['id']
-));
-$nombre_examen = $req_exam->rowCount();
-$resultat_exam = $req_exam->fetchAll();
-$req_exam->closeCursor();
-
-//Requete pour ajouter un gène
-if (isset($_POST['add_gene'])) {
-  $req_gene = $bdd->prepare("INSERT INTO `gestion_prescription`.`gene` (`gene_id`, `gene_nom`, `gene_chromosome`) VALUES (NULL, :nom_gene, :nom_chromosome);");
+<?php if ($resultat) { ?>
+  <?php 
+  //Requête pour récuperer les noms et prénoms des patients
+  $sql = "SELECT `patient_id`,`patient_nom`,`patient_prenom`,`patient_sexe` FROM `gestion_prescription`.`patient` WHERE `patient_actif`=0;";
+  $reponse = $bdd->query($sql);
+  $rows_patient = $reponse->fetchAll();
+  $reponse->closeCursor();
+  $req_exam = $bdd->prepare("SELECT `examen`.`examen_id`,`examen`.`examen_nom`,`patient`.`patient_nom`,`patient`.`patient_prenom` FROM `gestion_prescription`.`examen` INNER JOIN `gestion_prescription`.`patient` ON `examen`.`examen_patient_id`=`patient`.`patient_id` WHERE `examen_personnel_id`=:utilisateur_id ORDER BY `examen_date` DESC;");
   //On execute
-  $req_gene->execute(array(
-    'nom_gene' => htmlspecialchars($_POST['nom_gene']),
-    'nom_chromosome' => htmlspecialchars($_POST['list_chromosome'])
+  $req_exam->execute(array(
+    'utilisateur_id' => $_SESSION['id']
   ));
-  $req_gene->closeCursor();
+  $nombre_examen = $req_exam->rowCount();
+  $resultat_exam = $req_exam->fetchAll();
+  $req_exam->closeCursor();
+
+  //Requete pour ajouter un gène
+  if (isset($_POST['add_gene'])) {
+    $req_gene = $bdd->prepare("INSERT INTO `gestion_prescription`.`gene` (`gene_id`, `gene_nom`, `gene_chromosome`) VALUES (NULL, :nom_gene, :nom_chromosome);");
+    //On execute
+    $req_gene->execute(array(
+      'nom_gene' => htmlspecialchars($_POST['nom_gene']),
+      'nom_chromosome' => htmlspecialchars($_POST['list_chromosome'])
+    ));
+    $req_gene->closeCursor();
+
+
+  }
+  if (isset($_POST['add_patient'])) {
+  $patient_prenom = htmlspecialchars($_POST['nom_patient']);
+  $patient_nom = htmlspecialchars($_POST['prenom_patient']);
+  $patient_mail = htmlspecialchars($_POST['mail_patient']);
+  $patient_secu = htmlspecialchars($_POST['secu_patient']);
+  $patient_secu = intval(substr($patient_secu, 0, 15));
+  $patient_naissance = htmlspecialchars($_POST['naissance_patient']);
+  $patient_tel = substr(htmlspecialchars($_POST['tel_patient']),0,10);
+  $patient_pere_id = htmlspecialchars($_POST['list_patient_pere']);
+  $patient_mere_id = htmlspecialchars($_POST['list_patient_mere']);
+
+  if ($patient_pere_id == "none") {
+    $patient_pere_id=null;
+  }
+  if ($patient_mere_id == "none") {
+    $patient_mere_id=null;
+  }
+
+  $req_add_patient = $bdd->prepare("INSERT INTO `gestion_prescription`.`patient` (`patient_id`, `patient_num_secu`, `patient_prenom`, `patient_nom`, `patient_mail`, `patient_sexe`, `patient_date_naissance`, `patient_date_deces`, `patient_num_tel`, `patient_pere_id`, `patient_mere_id`, `patient_actif`) VALUES (NULL, :patient_secu, :patient_prenom, :patient_nom, :patient_mail, :patient_sexe, :patient_naissance, NULL, :patient_tel, :patient_pere_id, :patient_mere_id, '0');");
+  //On execute
+  $req_add_patient->execute(array(
+    'patient_prenom' => $patient_prenom,
+    'patient_prenom' => $patient_prenom,
+    'patient_nom' => $patient_nom,
+    'patient_mail' => $patient_mail,
+    'patient_password' => $patient_password,
+    'patient_type' => $patient_type
+  ));
+  $req_add_patient->closeCursor();
 
 
 }
 
 
-?>
-
-<?php if ($resultat) { ?>
+  ?>
   <!-- Modal pour affichage pour les administrateurs-->
   <?php if ($_SESSION['rang']==1) { 
      include('administration.php'); 
@@ -66,32 +102,40 @@ if (isset($_POST['add_gene'])) {
             </div> <!-- cont.row1.col1.row2-->
           </div> <!-- cont.row1.col1-->
           <div class="col-lg-7">
-          <div class="well well-lg col-lg-12"><!-- cont.row1.col2-->
-            <?php if ($_SESSION['rang']==1) { ?>
-              <legend><h3>Panneau d'administration</h3></legend>
-              <div class="row">
-                <div class="col-lg-3 col-lg-offset-3 text-center">
-                  <a class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#add_user"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></br>Utilisateur</a>
-                  
-                  <a class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#del_patient"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></br>Patient</a>
+          <?php if ($_SESSION['rang']==1) { ?>
+            <div class="row">
+              <div class="well well-lg col-lg-12"><!-- cont.row1.col2-->
+                <legend><h3>Panneau d'administration</h3></legend>
+                <div class="row">
+                  <div class="col-lg-3 col-lg-offset-3 text-center">
+                    <a class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#add_patient"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></br>Utilisateur</a>
+                    
+                    <a class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#del_patient"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></br>Patient</a>
+                  </div>
+                  <div class="col-lg-3 text-center">
+                    <a class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#del_user"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></br>Utilisateur</a>
+                    <a class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#del_gene"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></br>Gène</a>
+                  </div>
                 </div>
-                <div class="col-lg-3 text-center">
-                  <a class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#del_user"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></br>Utilisateur</a>
-                  <a class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#del_gene"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></br>Gène</a>
-                </div>
-              </div>
-            </div><!-- cont.row1.col2-->
+              </div><!-- cont.row1.col2-->
+            </div>
             <?php } ?>
-            <div class="well well-lg col-lg-12">
-              <legend><h3>Panneau d'utilisateur</h3></legend>
-              <div class="row">
-                <div class="col-lg-3 col-lg-offset-3 text-center">
-                  <a class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#add_gene"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></br>Gène</a>
-                  <a class="btn btn-primary btn-lg btn-block" href="panel.php"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></br>Panel</a>
-                </div>
-                <div class="col-lg-3 text-center">
-                  <a class="btn btn-primary btn-lg btn-block" href="examen.php"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></br>Examen</a>
-                  <a class="btn btn-info btn-lg btn-block" data-toggle="modal" data-target="#see_exam"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></br>Examen</a>
+            <div class="row">
+              <div class="well well-lg col-lg-12">
+                <legend><h3>Panneau d'utilisateur</h3></legend>
+                <div class="row">
+                  <div class="col-lg-3 col-lg-offset-1 text-center">
+                    <a class="btn btn-primary btn-lg btn-block" href="examen.php"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></br>Examen</a>
+                    <a class="btn btn-info btn-lg btn-block" data-toggle="modal" data-target="#see_exam"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></br>Examen</a>
+                  </div>
+                  <div class="col-lg-3 text-center">
+                    <a class="btn btn-primary btn-lg btn-block" href="panel.php"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></br>Panel</a>
+                    <a class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#add_gene"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></br>Gène</a>
+                  </div>
+                  <div class="col-lg-3 text-center">
+                    <a class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#add_patient"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></br>Patient</a>
+                    
+                  </div>
                 </div>
               </div>
             </div>
@@ -118,9 +162,9 @@ if (isset($_POST['add_gene'])) {
                                 </div>
                             </div>
                             <div class="form-group">
-                              <label class="col-md-3 control-label" for="selection_patient">Chromosome :</label>
+                              <label class="col-md-3 control-label" for="selection_chromosome">Chromosome :</label>
                               <div class="col-sm-8 col-sm-offset-1">
-                                <select class="form-control" id="selection_patient" name="list_chromosome">
+                                <select class="form-control" id="selection_chromosome" name="list_chromosome">
                                 <option name="1" value="1">Chromosome 1</option>
                                 <option name="2" value="2">Chromosome 2</option>
                                 <option name="3" value="3">Chromosome 3</option>
@@ -190,6 +234,91 @@ if (isset($_POST['add_gene'])) {
     </div>
   </div>
   <!-- Fin Fenetre qui s'ouvre lorsque l'on clique sur "suprimmer un patient" -->
+
+<!-- Fenetre qui s'ouvre lorsque l'on clique sur "ajouter un utilisateur" -->
+  <div class="modal fade" id="add_patient" tabindex="-1" role="dialog" aria-labelledby="modal_add_patient" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="modal_add_patient">Ajouter un patient</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal" action="index.php" method="post">
+            <div class="form-group">
+                <label for="nom_patient" class="col-sm-3 control-label">Nom :</label>
+                <div class="col-sm-8 col-sm-offset-1">
+                  <input type="text" class="form-control" id="nom_patient" name="nom_patient">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="prenom_patient" class="col-sm-3 control-label">Prénom :</label>
+                <div class="col-sm-8 col-sm-offset-1">
+                  <input type="text" class="form-control" id="prenom_patient" name="prenom_patient">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="mail_patient" class="col-sm-3 control-label">Email :</label>
+                <div class="col-sm-8 col-sm-offset-1">
+                  <input type="email" class="form-control" id="mail_patient" name="mail_patient">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="secu_patient" class="col-sm-5 control-label">Numéro de sécurité sociale :</label>
+                <div class="col-sm-6 col-sm-offset-1">
+                  <input type="text" class="form-control" id="secu_patient" name="secu_patient">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="naissance_patient" class="col-sm-6 control-label">Date de naissance (yyyy-mm-dd) :</label>
+                <div class="col-sm-5 col-sm-offset-1">
+                  <input type="text" class="form-control" id="naissance_patient" name="naissance_patient">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="tel_patient" class="col-sm-5 control-label">Numéro de téléphone :</label>
+                <div class="col-sm-6 col-sm-offset-1">
+                  <input type="text" class="form-control" id="tel_patient" name="tel_patient">
+                </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="selection_patient_pere">Père :</label>
+              <div class="col-sm-8 col-sm-offset-1">
+                <select class="form-control" id="selection_patient_pere" name="list_patient_pere">
+                  <option name="none" value="none">Non indiqué</option>
+                  <?php foreach ($rows_patient as $row) { 
+                    if ($row['patient_sexe'] == 'H') {?>
+                  <option name="<?php echo $row['patient_nom']."_".$row['patient_prenom']; ?>" value="<?php echo $row['patient_id']; ?>"><?php echo $row['patient_nom']." ".$row['patient_prenom']; ?></option>
+                <?php 
+                    }
+                  } ?>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="selection_patient_pere">Mère :</label>
+              <div class="col-sm-8 col-sm-offset-1">
+                <select class="form-control" id="selection_patient_mere" name="list_patient_mere">
+                  <option name="none" value="none">Non indiqué</option>
+                  <?php foreach ($rows_patient as $row) { 
+                    if ($row['patient_sexe'] == 'F') {?>
+                  <option name="<?php echo $row['patient_nom']."_".$row['patient_prenom']; ?>" value="<?php echo $row['patient_id']; ?>"><?php echo $row['patient_nom']." ".$row['patient_prenom']; ?></option>
+                <?php 
+                    }
+                  } ?>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+            <button type="submit" name="add_patient" value="add_patient" class="btn btn-primary">Ajouter un patient</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
 
 <!-- Fin modal pour tous les utilisateurs -->
 

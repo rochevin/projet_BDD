@@ -1,10 +1,5 @@
 <?php
-//Requête pour récuperer les noms et prénoms des patients
-$sql = "SELECT `patient_id`,`patient_nom`,`patient_prenom` FROM `gestion_prescription`.`patient`;";
-$reponse = $bdd->query($sql);
-$rows_patient = $reponse->fetchAll();
-$reponse->closeCursor();
-$sql = "SELECT `personnel_id`,`personnel_nom`,`personnel_prenom` FROM `gestion_prescription`.`personnel`;";
+$sql = "SELECT `personnel_id`,`personnel_nom`,`personnel_prenom` FROM `gestion_prescription`.`personnel` WHERE `personnel_actif`= 0;";
 $reponse = $bdd->query($sql);
 $rows_personnel = $reponse->fetchAll();
 $reponse->closeCursor();
@@ -12,15 +7,15 @@ $sql = "SELECT `type_personnel_id`,`type_personnel_nom` FROM `gestion_prescripti
 $reponse = $bdd->query($sql);
 $rows_type_user = $reponse->fetchAll();
 $reponse->closeCursor();
-$sql = "SELECT `gene_id`,`gene_nom` FROM `gestion_prescription`.`gene`";
+$sql = "SELECT `gene_id`,`gene_nom` FROM `gestion_prescription`.`gene` WHERE `gene_actif`= 0;";
 $reponse = $bdd->query($sql);
 $rows_gene = $reponse->fetchAll();
 $reponse->closeCursor();
 
 //Requete pour suprimmer un utilisateur
-if (isset($_POST['del_gene'])) {
+if (isset($_POST['del_gene']) && ($_SESSION['rang']==1)) {
   $id_gene = htmlspecialchars($_POST['list_gene']);
-  $req_gene = $bdd->prepare("DELETE FROM `gestion_prescription`.`gene` WHERE `gene`.`gene_id` = :id_gene;");
+  $req_gene = $bdd->prepare("UPDATE `gestion_prescription`.`gene` SET `gene_actif`= 1 WHERE `gene`.`gene_id` = :id_gene;");
   //On execute
   $req_gene->execute(array(
     'id_gene' => $id_gene
@@ -29,7 +24,55 @@ if (isset($_POST['del_gene'])) {
 
 
 }
+
+if (isset($_POST['del_user']) && ($_SESSION['rang']==1)) {
+  $id_personnel = htmlspecialchars($_POST['list_user']);
+  $req_del_user = $bdd->prepare("UPDATE `gestion_prescription`.`personnel` SET `personnel_actif`= 1 WHERE `personnel`.`personnel_id` = :id_personnel;");
+  //On execute
+  $req_del_user->execute(array(
+    'id_personnel' => $id_personnel
+  ));
+  $req_del_user->closeCursor();
+
+
+}
+
+if (isset($_POST['del_patient']) && ($_SESSION['rang']==1)) {
+  $id_patient = htmlspecialchars($_POST['list_patient']);
+  $req_del_user = $bdd->prepare("UPDATE `gestion_prescription`.`patient` SET `patient_actif`= 1 WHERE `patient`.`patient_id` = :id_patient;");
+  //On execute
+  $req_del_user->execute(array(
+    'id_patient' => $id_patient
+  ));
+  $req_del_user->closeCursor();
+
+
+}
+
+if (isset($_POST['add_user']) && ($_SESSION['rang']==1)) {
+  $user_prenom = htmlspecialchars($_POST['nom_user']);
+  $user_nom = htmlspecialchars($_POST['prenom_user']);
+  $user_mail = htmlspecialchars($_POST['mail_user']);
+  $user_password = htmlspecialchars(sha1($_POST['pass_user']));
+  $user_type = htmlspecialchars($_POST['list_type_user']);
+
+  $req_add_user = $bdd->prepare("INSERT INTO `gestion_prescription`.`personnel` (`personnel_id`, `personnel_prenom`, `personnel_nom`, `personnel_mail`, `personnel_password`, `personnel_type_personnel_id`, `personnel_actif`) VALUES (NULL, :user_prenom, :user_nom, :user_mail, :user_password, :user_type, 0);");
+  //On execute
+  $req_add_user->execute(array(
+    'user_prenom' => $user_prenom,
+    'user_nom' => $user_nom,
+    'user_mail' => $user_mail,
+    'user_password' => $user_password,
+    'user_type' => $user_type
+  ));
+  $req_add_user->closeCursor();
+
+
+}
+
+
 ?>
+
 
   <!-- Fenetre qui s'ouvre lorsque l'on clique sur "suprimmer un utilisateur" -->
   <div class="modal fade" id="del_user" tabindex="-1" role="dialog" aria-labelledby="modal_del_user" aria-hidden="true">
@@ -75,7 +118,7 @@ if (isset($_POST['del_gene'])) {
             <div class="form-group">
               <label class="col-md-3 control-label" for="selection_patient">Selection :</label>
               <div class="col-md-9">
-                <select class="form-control" id="selection_patient" name="list_user">
+                <select class="form-control" id="selection_patient" name="list_patient">
                 <?php foreach ($rows_patient as $row) { ?>
                   <option name="<?php echo $row['patient_nom']."_".$row['patient_prenom']; ?>" value="<?php echo $row['patient_id']; ?>"><?php echo $row['patient_nom']." ".$row['patient_prenom']; ?></option>
                 <?php } ?>
@@ -107,31 +150,31 @@ if (isset($_POST['del_gene'])) {
             <div class="form-group">
                 <label for="nom_user" class="col-sm-3 control-label">Nom :</label>
                 <div class="col-sm-8 col-sm-offset-1">
-                  <input type="text" class="form-control" id="nom_user">
+                  <input type="text" class="form-control" id="nom_user" name="nom_user">
                 </div>
             </div>
             <div class="form-group">
                 <label for="prenom_user" class="col-sm-3 control-label">Prénom :</label>
                 <div class="col-sm-8 col-sm-offset-1">
-                  <input type="text" class="form-control" id="prenom_user">
+                  <input type="text" class="form-control" id="prenom_user" name="prenom_user">
                 </div>
             </div>
             <div class="form-group">
-                <label for="nom_user" class="col-sm-3 control-label">Email :</label>
+                <label for="mail_user" class="col-sm-3 control-label">Email :</label>
                 <div class="col-sm-8 col-sm-offset-1">
-                  <input type="email" class="form-control" id="mail_user">
+                  <input type="email" class="form-control" id="mail_user" name="mail_user">
                 </div>
             </div>
             <div class="form-group">
-                <label for="nom_user" class="col-sm-3 control-label">Mot de passe :</label>
+                <label for="pass_user" class="col-sm-3 control-label">Mot de passe :</label>
                 <div class="col-sm-8 col-sm-offset-1">
-                  <input type="password" class="form-control" id="nom_user">
+                  <input type="password" class="form-control" id="pass_user" name="pass_user">
                 </div>
             </div>
             <div class="form-group">
-              <label class="col-md-3 control-label" for="selection_patient">Statut :</label>
+              <label class="col-md-3 control-label" for="selection_type_user">Statut :</label>
               <div class="col-sm-8 col-sm-offset-1">
-                <select class="form-control" id="selection_patient" name="list_user">
+                <select class="form-control" id="selection_user" name="list_type_user">
                 <?php foreach ($rows_type_user as $row) { ?>
                   <option name="<?php echo $row['type_personnel_nom']; ?>" value="<?php echo $row['type_personnel_id']; ?>"><?php echo $row['type_personnel_nom']; ?></option>
                 <?php } ?>

@@ -37,34 +37,37 @@
 
   }
   if (isset($_POST['add_patient'])) {
-  $patient_prenom = htmlspecialchars($_POST['nom_patient']);
-  $patient_nom = htmlspecialchars($_POST['prenom_patient']);
-  $patient_mail = htmlspecialchars($_POST['mail_patient']);
-  $patient_secu = htmlspecialchars($_POST['secu_patient']);
-  $patient_secu = intval(substr($patient_secu, 0, 15));
-  $patient_naissance = htmlspecialchars($_POST['naissance_patient']);
-  $patient_tel = substr(htmlspecialchars($_POST['tel_patient']),0,10);
-  $patient_pere_id = htmlspecialchars($_POST['list_patient_pere']);
-  $patient_mere_id = htmlspecialchars($_POST['list_patient_mere']);
+    $patient_prenom = htmlspecialchars($_POST['nom_patient']);
+    $patient_nom = htmlspecialchars($_POST['prenom_patient']);
+    $patient_mail = htmlspecialchars($_POST['mail_patient']);
+    $patient_secu = htmlspecialchars($_POST['secu_patient']);
+    $patient_secu = intval(substr($patient_secu, 0, 15));
+    $patient_naissance = htmlspecialchars($_POST['naissance_patient']);
+    $patient_tel = substr(htmlspecialchars($_POST['tel_patient']),0,10);
+    $patient_pere_id = intval(htmlspecialchars($_POST['list_patient_pere']));
+    $patient_mere_id = intval(htmlspecialchars($_POST['list_patient_mere']));
 
-  if ($patient_pere_id == "none") {
-    $patient_pere_id=null;
-  }
-  if ($patient_mere_id == "none") {
-    $patient_mere_id=null;
-  }
+    if ($patient_pere_id == "none") {
+      $patient_pere_id=null;
+    }
+    if ($patient_mere_id == "none") {
+      $patient_mere_id=null;
+    }
 
-  $req_add_patient = $bdd->prepare("INSERT INTO `gestion_prescription`.`patient` (`patient_id`, `patient_num_secu`, `patient_prenom`, `patient_nom`, `patient_mail`, `patient_sexe`, `patient_date_naissance`, `patient_date_deces`, `patient_num_tel`, `patient_pere_id`, `patient_mere_id`, `patient_actif`) VALUES (NULL, :patient_secu, :patient_prenom, :patient_nom, :patient_mail, :patient_sexe, :patient_naissance, NULL, :patient_tel, :patient_pere_id, :patient_mere_id, '0');");
-  //On execute
-  $req_add_patient->execute(array(
-    'patient_prenom' => $patient_prenom,
-    'patient_prenom' => $patient_prenom,
-    'patient_nom' => $patient_nom,
-    'patient_mail' => $patient_mail,
-    'patient_password' => $patient_password,
-    'patient_type' => $patient_type
-  ));
-  $req_add_patient->closeCursor();
+    $req_add_patient = $bdd->prepare("INSERT INTO `gestion_prescription`.`patient` (`patient_id`, `patient_num_secu`, `patient_prenom`, `patient_nom`, `patient_mail`, `patient_sexe`, `patient_date_naissance`, `patient_date_deces`, `patient_num_tel`, `patient_pere_id`, `patient_mere_id`, `patient_actif`) VALUES (NULL, :patient_secu, :patient_prenom, :patient_nom, :patient_mail, :patient_sexe, :patient_naissance, NULL, :patient_tel, :patient_pere_id, :patient_mere_id, '0');");
+    //On execute
+    $req_add_patient->execute(array(
+      'patient_secu' => $patient_secu,
+      'patient_prenom' => $patient_prenom,
+      'patient_nom' => $patient_nom,
+      'patient_mail' => $patient_mail,
+      'patient_sexe' => $patient_sexe,
+      'patient_naissance' => $patient_naissance,
+      'patient_tel' => $patient_tel,
+      'patient_pere_id' => isset($patient_pere_id) ? $patient_pere_id : null,
+      'patient_mere_id' => isset($patient_mere_id) ? $patient_mere_id : null
+    ));
+    $req_add_patient->closeCursor();
 
 
 }
@@ -82,7 +85,7 @@
             <div class="row"> <!-- cont.row1.col1.row1-->
               <div class="col-lg-12">
                 <ul class="list-group">
-                  <li class="list-group-item"><h4><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Dr. <?php echo $_SESSION['prenom']." ".$_SESSION['nom']; ?></h4></li>
+                  <li class="list-group-item"><h4><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <?php echo $_SESSION['type']; ?> <?php echo $_SESSION['prenom']." ".$_SESSION['nom']; ?></h4></li>
                 </ul>
               </div>
             </div> <!-- cont.row1.col1.row1-->

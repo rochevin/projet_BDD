@@ -35,25 +35,23 @@
 					</div>
 					<div class="row">
 						<div clas="col-lg-12">
-							<div >
-								<h4><strong>Informations principales :</strong></h4>
-								<table class="table table-striped">
-									<tbody>
-										<tr>
-											<td><strong>Nom :</strong></td>
-											<td><?php echo $row_informations['examen_nom']; ?></td>
-										</tr>
-										<tr>
-											<td><strong>Pathologie :</strong></td>
-											<td><?php echo $row_informations['examen_pathologie']; ?></td>
-										</tr>
-										<tr>
-											<td><strong>Date :</strong></td>
-											<td><?php echo $row_informations['examen_date']; ?></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
+							<h4><strong>Informations principales :</strong></h4>
+							<table class="table table-striped">
+								<tbody>
+									<tr>
+										<td><strong>Nom :</strong></td>
+										<td><?php echo $row_informations['examen_nom']; ?></td>
+									</tr>
+									<tr>
+										<td><strong>Pathologie :</strong></td>
+										<td><?php echo $row_informations['examen_pathologie']; ?></td>
+									</tr>
+									<tr>
+										<td><strong>Date :</strong></td>
+										<td><?php echo $row_informations['examen_date']; ?></td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 					</div>
 					<div class="row">
@@ -80,36 +78,34 @@
 								</div>
 								<div class="row">
 									<div clas="col-lg-12">
-										<div >
-											<table class="table table-striped">
-												<tbody>
-													<tr>
-														<td><strong>Nom :</strong></td>
-														<td><?php echo $row_informations['patient_nom']." ".$row_informations['patient_prenom']; ?></td>
-													</tr>
-													<tr>
-														<td><strong>Numéro de sécu :</strong></td>
-														<td><?php echo $row_informations['patient_num_secu']; ?></td>
-													</tr>
-													<tr>
-														<td><strong>Sexe :</strong></td>
-														<td><?php echo $row_informations['patient_sexe']; ?></td>
-													</tr>
-													<tr>
-														<td><strong>Date de naissance :</strong></td>
-														<td><?php echo $row_informations['patient_date_naissance']; ?></td>
-													</tr>
-													<tr>
-														<td><strong>Email :</strong></td>
-														<td><a href="mailto:<?php echo $row_informations['patient_mail']; ?>"><?php echo $row_informations['patient_mail']; ?></a></td>
-													</tr>
-													<tr>
-														<td><strong>Numéro tel :</strong></td>
-														<td><?php echo $row_informations['patient_num_tel']; ?></td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
+										<table class="table table-striped">
+											<tbody>
+												<tr>
+													<td><strong>Nom :</strong></td>
+													<td><?php echo $row_informations['patient_nom']." ".$row_informations['patient_prenom']; ?></td>
+												</tr>
+												<tr>
+													<td><strong>Numéro de sécu :</strong></td>
+													<td><?php echo $row_informations['patient_num_secu']; ?></td>
+												</tr>
+												<tr>
+													<td><strong>Sexe :</strong></td>
+													<td><?php echo $row_informations['patient_sexe']; ?></td>
+												</tr>
+												<tr>
+													<td><strong>Date de naissance :</strong></td>
+													<td><?php echo $row_informations['patient_date_naissance']; ?></td>
+												</tr>
+												<tr>
+													<td><strong>Email :</strong></td>
+													<td><a href="mailto:<?php echo $row_informations['patient_mail']; ?>"><?php echo $row_informations['patient_mail']; ?></a></td>
+												</tr>
+												<tr>
+													<td><strong>Numéro tel :</strong></td>
+													<td><?php echo $row_informations['patient_num_tel']; ?></td>
+												</tr>
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>
@@ -123,24 +119,22 @@
 								</div>
 								<div class="row">
 									<div clas="col-lg-12">
-										<div >
-											<table class="table table-striped">
-												<tbody>
-													<tr>
-														<td><strong>Nom :</strong></td>
-														<td><?php echo $row_informations['personnel_nom']; ?></td>
-													</tr>
-													<tr>
-														<td><strong>Prenom :</strong></td>
-														<td><?php echo $row_informations['personnel_prenom']; ?></td>
-													</tr>
-													<tr>
-														<td><strong>Mail :</strong></td>
-														<td><a href="mailto:<?php echo $row_informations['personnel_mail']; ?>"><?php echo $row_informations['personnel_mail']; ?></a></td>
-													</tr>
-												</tbody>
-											</table>
-										</div>
+										<table class="table table-striped">
+											<tbody>
+												<tr>
+													<td><strong>Nom :</strong></td>
+													<td><?php echo $row_informations['personnel_nom']; ?></td>
+												</tr>
+												<tr>
+													<td><strong>Prenom :</strong></td>
+													<td><?php echo $row_informations['personnel_prenom']; ?></td>
+												</tr>
+												<tr>
+													<td><strong>Mail :</strong></td>
+													<td><a href="mailto:<?php echo $row_informations['personnel_mail']; ?>"><?php echo $row_informations['personnel_mail']; ?></a></td>
+												</tr>
+											</tbody>
+										</table>
 									</div>
 								</div>
 							</div>

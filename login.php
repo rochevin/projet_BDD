@@ -41,10 +41,10 @@
 						</div>
 						<div class="form-group">
 							<label for="num_secu">Numéro de sécurité sociale</label>
-							<input name="num_secu_utilisateur" type="text" class="form-control" id="num_secu" placeholder="Entrez votre numéro de sécurité sociale">
+							<input name="num_secu_patient" type="text" class="form-control" id="num_secu" placeholder="Entrez votre numéro de sécurité sociale">
 						</div>
 						<legend></legend>
-						<button type="button" class="btn btn-danger btn-lg btn-block">Résultats d'examen</button>
+						<button type="submit" class="btn btn-danger btn-lg btn-block">Résultats d'examen</button>
 					</form>
 				</div>
 			</div>

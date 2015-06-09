@@ -48,7 +48,7 @@
 				<div class="col-lg-10 col-lg-offset-1"> <!-- cont.row1.col1-->
 					<?php if ( $affichage == 1 ) {  ?>
 					<div class="row">
-				        <div class="alert alert-success alert-dismissable">
+						<div class="alert alert-success alert-dismissable">
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 							<strong><span class='glyphicon glyphicon-ok-circle'></span> Création de l'examen réussi !</strong> 
 						</div>
@@ -85,10 +85,10 @@
 											<button class="btn btn-primary btn-lg btn-block" type="submit" ><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> Créer l'examen</button>
 										</div>
 									</div>
-	 							</div>
-	      					</div>
-	      					<div class="col-lg-6">
-	      						<div class="row">
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="row">
 									<div class="well well-sm">
 										<legend class="text-center">Informations Patient</legend>
 										<div class="form-group">
@@ -101,9 +101,9 @@
 												</select>
 											</div>
 										</div>
-		 							</div>
-	 							</div>
-	 							<div class="row">
+									</div>
+								</div>
+								<div class="row">
 									<div class="well well-sm">
 										<legend class="text-center">Sélection du panel</legend>
 										<div class="form-group">
@@ -116,17 +116,17 @@
 												</select>
 											</div>
 										</div>				
-		 							</div>
-	 							</div>
-	      					</div>
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="row">
 							<div class="col-lg-12">
 								<div class="well well-sm">
 									<legend class="text-center">Commentaires</legend>
 											<textarea name="examen_commentaires" class="form-control" rows="10" style="resize:vertical;"></textarea>
-	 							</div>
-	      					</div>
+								</div>
+							</div>
 						</div>
 					</form>
 				</div>

@@ -36,7 +36,7 @@ $reponse = $bdd->query($sql);
 $rows = $reponse->fetchAll();
 //On parcours les éléments de la requête, et on récupère les chromosomes pour le tri
 foreach ($rows as $row){
-    $chromosome_list[$row['gene_chromosome']] = '';
+	$chromosome_list[$row['gene_chromosome']] = '';
 }
 //On tri les chromosomes dans le bon ordre pour l'affichage
 ksort($chromosome_list);
@@ -45,23 +45,23 @@ $reponse->closeCursor();
 
 
 	<?php include('header.php'); ?>
-	        <div class="row" id="first_line"> <!-- DEBUT PREMIERE LIGNE cont.row1-->
-	        <div class="col-lg-8 col-lg-offset-2"> <!-- cont.row1.col1-->
-	        <?php if ( $affichage == 1 ) {  ?>
-	        <div class="alert alert-success alert-dismissable">
+			<div class="row" id="first_line"> <!-- DEBUT PREMIERE LIGNE cont.row1-->
+			<div class="col-lg-8 col-lg-offset-2"> <!-- cont.row1.col1-->
+			<?php if ( $affichage == 1 ) {  ?>
+			<div class="alert alert-success alert-dismissable">
 				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 				<strong><span class='glyphicon glyphicon-ok-circle'></span> Création du panel réussi !</strong> Le panel <strong><?php echo $nom_panel; ?></strong> a bien été créer et contient <strong><?php echo $nombre_genes; ?> gènes</strong>
 			</div>
 			<?php } ?>
-	        	<div class="row"> <!-- cont.row1.col1.row1-->
-	              <div class="col-lg-12">
-	                <form class="form-inline" method="post" action="panel.php">
-	               		<div class="row">
-		               		<h1>Créer un nouveau panel de gènes</h1>
-		               	</div>
-		               	<div class="row">
-		               		<div class="jumbotron">
-			               		<div class="form-group">
+				<div class="row"> <!-- cont.row1.col1.row1-->
+				  <div class="col-lg-12">
+					<form class="form-inline" method="post" action="panel.php">
+						<div class="row">
+							<h1>Créer un nouveau panel de gènes</h1>
+						</div>
+						<div class="row">
+							<div class="jumbotron">
+								<div class="form-group">
 									<label for="panelname">Nom du Panel :</label>
 									<input type="text" class="form-control" id="panel_name" placeholder="Entrez un nom de panel" name="panel_name" required>
 									<button class="btn btn-primary" type="submit" ><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> Créer le panel</button>
@@ -81,10 +81,10 @@ $reponse->closeCursor();
 							</div>
 						</div>
 						<?php } ?>
-	                </form>
-	              </div>
-	            </div> <!-- cont.row1.col1.row1-->
-	        </div> <!-- cont.row1.col1-->
-	        </div> <!-- FIN PREMIERE LIGNE -->
+					</form>
+				  </div>
+				</div> <!-- cont.row1.col1.row1-->
+			</div> <!-- cont.row1.col1-->
+			</div> <!-- FIN PREMIERE LIGNE -->
 	<?php include('footer.php'); ?>
 <?php } //La fin du if ?>

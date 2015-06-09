@@ -41,6 +41,6 @@
 						</table>
 					</div>
 				</div>
-	 		</div> <!-- FIN PREMIERE LIGNE -->
+			</div> <!-- FIN PREMIERE LIGNE -->
 	<?php include('footer.php'); ?>
 <?php } //La fin du if ?>

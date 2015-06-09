@@ -1,7 +1,7 @@
 <?php 
 if (isset($_SESSION['email']) AND isset($_SESSION['mdp'])) {
 	//Préparation de la requête :
-	$req = $bdd->prepare("SELECT `personnel`.`personnel_mail`,`personnel`.`personnel_password` FROM `gestion_prescription`.`personnel` WHERE `personnel_mail`=:email AND `personnel_password`=:mdp AND `personnel_actif`=0;");
+	$req = $bdd->prepare("SELECT `personnel`.`personnel_id` FROM `gestion_prescription`.`personnel` WHERE `personnel_mail`=:email AND `personnel_password`=:mdp AND `personnel_actif`=0;");
 	$req->execute(array(
 		'email' => $_SESSION['email'],
 		'mdp' => $_SESSION['mdp']));

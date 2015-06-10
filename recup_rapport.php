@@ -11,21 +11,37 @@ if (isset($_POST['num_secu_patient']) AND isset($_POST['email_patient'])) {
 		'secu' => $num_secu_patient));
 
 	$resultat = $req->fetch();
+	$id_patient = $resultat['patient_id'];
 } else { ?>
-	<div class="alert alert-danger alert-dismissable">
-		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-		<strong><span class='glyphicon glyphicon-exclamation-sign'></span></strong> Erreur ! <strong> Veuillez rentrer des informations valides.
+	<div class="col-lg-4 col-lg-offset-4">
+		<div class="alert alert-danger alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<strong><span class='glyphicon glyphicon-exclamation-sign'></span></strong></strong> Erreur ! </strong> Veuillez rentrer des informations valides.
+		</div>
 	</div>
-
 	<?php include('login.php');
 }
 ?>
 
 
-<?php if ($resultat) { ?>
-	
-	
+<?php if (($resultat) AND isset($_POST['num_secu_patient']) AND isset($_POST['email_patient'])) { 
+	$req_one = $bdd->prepare("SELECT `examen`.`examen_nom`,`examen`.`examen_date`,`examen`.`examen_pathologie`,`examen`.`examen_commentaires`, `examen`.`examen_panel_gene_id`,`patient`.`patient_num_secu` ,`patient`.`patient_nom`,`patient`.`patient_prenom`,`patient`.`patient_sexe`,`patient`.`patient_date_naissance`, `patient`.`patient_mail`, `patient`.`patient_num_tel`, `personnel`.`personnel_nom`,`personnel`.`personnel_prenom`,`personnel`.`personnel_mail` FROM `gestion_prescription`.`examen` INNER JOIN `gestion_prescription`.`patient` ON `examen_patient_id`=`patient_id` INNER JOIN `gestion_prescription`.`personnel` ON `examen_personnel_id`=`personnel_id` WHERE `examen_patient_id`=:id_patient ORDER BY `examen_date` DESC LIMIT 1;");
+	$req_one->execute(array(
+			'id_patient' => $id_patient
+		));
+	$row_informations = $req_one->fetch();
+	$id_panel = $row_informations['examen_panel_gene_id'];
+	$req_one->closeCursor();
+	//Requête pour récuperer les gènes du panel liés à l'examen (sans le nom du panel)
+	$req_two = $bdd->prepare("SELECT `gene`.`gene_nom` FROM `gestion_prescription`.`assoc_panel_gene` INNER JOIN `gestion_prescription`.`gene` ON `assoc_panel_gene`.`assoc_gene_id`=`gene`.`gene_id` WHERE `assoc_panel_id`=:id_panel;");
+	$req_two->execute(array(
+			'id_panel' => $id_panel
+		));
+	$rows_gene = $req_two->fetchAll();
+	$req_two->closeCursor();
 
+	if ($row_informations) {
+?>
 	<!DOCTYPE html>
 	<html lang="fr">
 		<head>
@@ -159,11 +175,23 @@ if (isset($_POST['num_secu_patient']) AND isset($_POST['email_patient'])) {
 			<script src="source/js/bootstrap.min.js"></script>
 		</body>
 	</html>
-<?php } 
+<?php }
+	else { ?>
+		<div class="col-lg-4 col-lg-offset-4">
+			<div class="alert alert-warning alert-dismissable">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<strong><span class='glyphicon glyphicon-exclamation-sign'></span></strong><strong> Erreur ! </strong> Vous n'avez aucun examen dans la base de données.
+			</div>
+		</div>
+		<?php include('login.php');
+	}
+} 
 else { ?>
-	<div class="alert alert-danger alert-dismissable">
-		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-		<strong><span class='glyphicon glyphicon-exclamation-sign'></span></strong> Erreur ! <strong> Le mail utilisé ou le numéro de sécurité sociale est incorrect.
+	<div class="col-lg-4 col-lg-offset-4">
+		<div class="alert alert-danger alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<strong><span class='glyphicon glyphicon-exclamation-sign'></span></strong><strong> Erreur ! </strong> Le mail utilisé ou le numéro de sécurité sociale est incorrect.
+		</div>
 	</div>
 	<?php include('login.php');
 }

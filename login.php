@@ -34,7 +34,7 @@
 			<div class="row">
 				<div class="well well-lg">
 					<legend><h2 class="text-center">Vous êtes un patient ?</h2></legend>
-					<form method="post" action="index.php">
+					<form method="post" action="recup_rapport.php">
 						<div class="form-group">
 							<label for="mail">Adresse Email</label>
 							<input name="email_patient" type="email" class="form-control" id="mail" placeholder="Entrez votre adresse email">

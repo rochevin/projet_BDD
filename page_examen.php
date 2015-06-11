@@ -6,15 +6,30 @@
 	<?php 
 	$id_exam = intval(htmlspecialchars($_GET['id']));
 	//Requête pour récupérer les informations sur l'examen, sur le prescripteur qui a réalisé l'examen et sur le patient
-	$req_one = $bdd->prepare("SELECT `examen`.`examen_nom`,`examen`.`examen_date`,`examen`.`examen_pathologie`,`examen`.`examen_commentaires`, `examen`.`examen_panel_gene_id`,`patient`.`patient_num_secu` ,`patient`.`patient_nom`,`patient`.`patient_prenom`,`patient`.`patient_sexe`,`patient`.`patient_date_naissance`, `patient`.`patient_mail`, `patient`.`patient_num_tel`, `personnel`.`personnel_nom`,`personnel`.`personnel_prenom`,`personnel`.`personnel_mail` FROM `gestion_prescription`.`examen` INNER JOIN `gestion_prescription`.`patient` ON `examen_patient_id`=`patient_id` INNER JOIN `gestion_prescription`.`personnel` ON `examen_personnel_id`=`personnel_id` WHERE `examen_id`=:id_exam AND `examen_personnel_id`=:id_prescripteur;");
+	$req_one = $bdd->prepare("SELECT `examen`.`examen_nom`,`examen`.`examen_date`,`examen`.`examen_pathologie`,`examen`.`examen_commentaires`, `examen`.`examen_panel_gene_id`,`patient`.`patient_num_secu` ,`patient`.`patient_nom`,`patient`.`patient_prenom`,`patient`.`patient_sexe`,`patient`.`patient_date_naissance`, `patient`.`patient_mail`, `patient`.`patient_num_tel`,`patient`.`patient_pere_id`,`patient`.`patient_mere_id`, `personnel`.`personnel_nom`,`personnel`.`personnel_prenom`,`personnel`.`personnel_mail` FROM `gestion_prescription`.`examen` INNER JOIN `gestion_prescription`.`patient` ON `examen_patient_id`=`patient_id` INNER JOIN `gestion_prescription`.`personnel` ON `examen_personnel_id`=`personnel_id` WHERE `examen_id`=:id_exam AND `examen_personnel_id`=:id_prescripteur;");
 	$req_one->execute(array(
 			'id_exam' => $id_exam,
 			'id_prescripteur' => $_SESSION['id']
 		));
 	$row_informations = $req_one->fetch();
-	$personnel_nom = $row_informations['personnel_nom'];
-	$personnel_prenom = $row_informations['personnel_prenom'];
-	$personnel_mail = $row_informations['personnel_mail'];
+
+	if ($row_informations['patient_pere_id']) {
+		$req_pere = $bdd->prepare("SELECT `patient_nom`,`patient_prenom` FROM `patient` WHERE `patient_id`=:id_pere;");
+
+		$req_pere->execute(array(
+			'id_pere' => $row_informations['patient_pere_id']
+		));
+		$row_pere = $req_pere->fetch();
+	}
+	if ($row_informations['patient_mere_id']) {
+		$req_mere = $bdd->prepare("SELECT `patient_nom`,`patient_prenom` FROM `patient` WHERE `patient_id`=:id_mere;");
+
+		$req_mere->execute(array(
+			'id_mere' => $row_informations['patient_mere_id']
+		));
+		$row_mere = $req_mere->fetch();
+	}
+
 	$id_panel = $row_informations['examen_panel_gene_id'];
 	$req_one->closeCursor();
 	//Requête pour récuperer les gènes du panel liés à l'examen (sans le nom du panel)
@@ -29,6 +44,7 @@
 
 	<?php include('header.php'); ?>
 			<div class="row" id="first_line"> <!-- DEBUT PREMIERE LIGNE cont.row1-->
+
 				<div class="col-lg-7 col-lg-offset-1 jumbotron"> <!-- cont.row1.col1-->
 					<div class="row">
 						<legend><h2>Fiche de l'examen </h2></legend>
@@ -104,6 +120,18 @@
 													<td><strong>Numéro tel :</strong></td>
 													<td><?php echo $row_informations['patient_num_tel']; ?></td>
 												</tr>
+												<?php if ($row_pere) {?>
+												<tr>
+													<td><strong>Père :</strong></td>
+													<td><?php echo $row_pere['patient_prenom']." ".$row_pere['patient_nom']; ?></td>
+												</tr>
+												<?php } ?>
+												<?php if ($row_mere) {?>
+												<tr>
+													<td><strong>Mère :</strong></td>
+													<td><?php echo $row_mere['patient_prenom']." ".$row_mere['patient_nom']; ?></td>
+												</tr>
+												<?php } ?>
 											</tbody>
 										</table>
 									</div>

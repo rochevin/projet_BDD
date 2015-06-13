@@ -1,19 +1,19 @@
+<!-- On lance la session -->
 <?php session_start(); ?>
-
+<!-- On inclut la page de connexion -->
 <?php include('connexion.php'); ?>
-
+<!-- On vérifie que l'utilisateur est bien connecté et présent dans la base de données -->
 <?php include('verification.php');?>
-<?php if ($resultat) { ?>
-	<?php 
+<!-- Si la requête de vérification contient un résultat, on peut afficher l'interface et executer les requêtes -->
+<?php if ($resultat) { 
 	if (!empty( $_POST['examen_nom']) && !empty( $_POST['examen_pathologie'])) { //Si le nom panel_name existe et que POST contient au moins un gene plus le nom du panel, on peut executer la requête
+		//On récupère les données envoyées en formulaire tout en échappant les caractères
 		$examen_nom = htmlspecialchars($_POST['examen_nom']);
 		$examen_pathologie = htmlspecialchars($_POST['examen_pathologie']);
 		$examen_commentaires = htmlspecialchars($_POST['examen_commentaires']);
 		$examen_patient_id = intval(htmlspecialchars($_POST['list_patient']));
 		$examen_panel_id = intval(htmlspecialchars($_POST['list_panel']));
 		$examen_date = date("Y-m-d");
-		//On met affichage à 1 pour afficher le résultat de l'insertion sur la page
-		$affichage = 1;
 		//On prépare la requête d'insertion qui va créer le nouveau panel
 		$req = $bdd->prepare("INSERT INTO `gestion_prescription`.`examen` (`examen_id`, `examen_nom`, `examen_date`, `examen_pathologie`, `examen_commentaires`, `examen_patient_id`, `examen_panel_gene_id`, `examen_personnel_id`) VALUES (NULL, :exam_nom, :exam_date, :exam_pathologie, :exam_commentaires, :patient_id, :panel_id, :personnel_id);");
 		//On execute
@@ -26,7 +26,7 @@
 			'panel_id' => $examen_panel_id, 
 			'personnel_id' => $_SESSION['id']
 		));
-		$req->closeCursor();
+		$req->closeCursor(); // on indique que la requête est terminée
 	}
 	?>
 
@@ -34,19 +34,20 @@
 	//Requête pour récuperer les noms et prénoms des patients
 	$sql = "SELECT `patient_id`,`patient_nom`,`patient_prenom` FROM `gestion_prescription`.`patient`;";
 	$reponse = $bdd->query($sql);
-	$rows_patient = $reponse->fetchAll();
-	$reponse->closeCursor();
+	$rows_patient = $reponse->fetchAll(); //On stock les données dans la variable $rows_patient
+	$reponse->closeCursor(); // on indique que la requête est terminée
+	//Requête pour récuperer les différents panels
 	$sql = "SELECT `panel_gene_nom`,`panel_gene_id` FROM `gestion_prescription`.`panel_gene`;";
 	$reponse = $bdd->query($sql);
-	$rows_panel = $reponse->fetchAll();
-	$reponse->closeCursor();
+	$rows_panel = $reponse->fetchAll(); //On stock les données dans la variable $rows_panel
+	$reponse->closeCursor(); // on indique que la requête est terminée
 	?>
 
-
+	<!-- On inclut le header -->
 	<?php include('header.php'); ?>
 			<div class="row" id="first_line"> <!-- DEBUT PREMIERE LIGNE cont.row1-->
 				<div class="col-lg-10 col-lg-offset-1"> <!-- cont.row1.col1-->
-					<?php if ( $affichage == 1 ) {  ?>
+					<?php if (!empty( $_POST['examen_nom']) && !empty( $_POST['examen_pathologie'])) {//Si on envoit le formulaire sur la page, on indique le succes de l'opération sur l'interface sous la forme d'une petite fenêtre qu'on peut fermer ?>
 					<div class="row">
 						<div class="alert alert-success alert-dismissable">
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -54,10 +55,14 @@
 						</div>
 					</div>
 					<?php } ?>
+					<!-- Première ligne pour le titre -->
 					<div class="row">
 						<legend><h1>Créer un nouvel examen</h1></legend>
 					</div>
+					<!-- Début du formulaire -->
 					<form class="form-horizontal" action="examen.php" method="post">
+						<!-- Deuxième ligne, avec les input pour choisir le nom de l'examen, et sa pathologie -->
+						<!-- Ainsi que la sélection du patient et du panel -->
 						<div class="row">
 							<div class="col-lg-6">
 								<div class="well well-sm">
@@ -120,6 +125,7 @@
 								</div>
 							</div>
 						</div>
+						<!-- Troisième ligne, contient le formulaire pour inclure les commentaires sur l'examen -->
 						<div class="row">
 							<div class="col-lg-12">
 								<div class="well well-sm">
@@ -128,7 +134,7 @@
 								</div>
 							</div>
 						</div>
-					</form>
+					</form> <!-- Fin du formulaire -->
 				</div>
 			</div> <!-- FIN PREMIERE LIGNE -->
 	<?php include('footer.php'); ?>

@@ -1,59 +1,68 @@
+<!-- On lance la session -->
 <?php session_start(); ?>
+<!-- On inclut la page de connexion -->
 <?php include('connexion.php'); ?>
+<!-- En cas d'envoit du formulaire deconnexion, on détruit la session -> retour à la page de login -->
 <?php if ((isset($_GET['action'])) && ($_GET['action'] == 'deconnexion'))
 	{
-		$_SESSION = array();
-		session_destroy();
+		$_SESSION = array(); //On vide l'array
+		session_destroy(); //On détruit la session
 	}
 ?>
-
+<!-- On vérifie que l'utilisateur est bien connecté et présent dans la base de données -->
 <?php include('verification.php');?>
 <?php if ($resultat) { ?>
 	<?php 
 	//Requête pour récuperer les noms et prénoms des patients
 	$sql = "SELECT `patient_id`,`patient_nom`,`patient_prenom`,`patient_sexe` FROM `gestion_prescription`.`patient` WHERE `patient_actif`=0;";
 	$reponse = $bdd->query($sql);
-	$rows_patient = $reponse->fetchAll();
-	$reponse->closeCursor();
+	$rows_patient = $reponse->fetchAll(); //les résultats sont stockés dans $rows_patient
+	$reponse->closeCursor(); // on indique que la requête est terminée
 	$req_exam = $bdd->prepare("SELECT `examen`.`examen_id`,`examen`.`examen_nom`,`patient`.`patient_nom`,`patient`.`patient_prenom` FROM `gestion_prescription`.`examen` INNER JOIN `gestion_prescription`.`patient` ON `examen`.`examen_patient_id`=`patient`.`patient_id` WHERE `examen_personnel_id`=:utilisateur_id ORDER BY `examen_date` DESC;");
-	//On execute
+	//On execute avec l'identifiant de l'utilisateur récupéré via la session
 	$req_exam->execute(array(
 		'utilisateur_id' => $_SESSION['id']
 	));
+	//On récupère les examens de l'utilisateur et on compte le nombre d'examen récupéré pour l'interface
 	$nombre_examen = $req_exam->rowCount();
 	$resultat_exam = $req_exam->fetchAll();
-	$req_exam->closeCursor();
+	$req_exam->closeCursor(); // on indique que la requête est terminée
 
-	//Requete pour ajouter un gène
+	//Requête pour ajouter un gène
 	if (isset($_POST['add_gene'])) {
+		//On récupère les informations contenus dans la variable POST
+		$nom_gene = htmlspecialchars($_POST['nom_gene']);
+		$nom_chromosome = htmlspecialchars($_POST['list_chromosome']);
 		$req_gene = $bdd->prepare("INSERT INTO `gestion_prescription`.`gene` (`gene_id`, `gene_nom`, `gene_chromosome`) VALUES (NULL, :nom_gene, :nom_chromosome);");
 		//On execute
 		$req_gene->execute(array(
-			'nom_gene' => htmlspecialchars($_POST['nom_gene']),
-			'nom_chromosome' => htmlspecialchars($_POST['list_chromosome'])
+			'nom_gene' => $nom_gene,
+			'nom_chromosome' => $nom_chromosome
 		));
-		$req_gene->closeCursor();
+		$req_gene->closeCursor(); // on indique que la requête est terminée
 
 
 	}
 	if (isset($_POST['add_patient'])) {
+		//On récupère toutes les informations du formulaire via POST
 		$patient_prenom = htmlspecialchars($_POST['nom_patient']);
 		$patient_nom = htmlspecialchars($_POST['prenom_patient']);
 		$patient_mail = htmlspecialchars($_POST['mail_patient']);
 		$patient_secu = htmlspecialchars($_POST['secu_patient']);
-		$patient_secu = intval(substr($patient_secu, 0, 15));
+		$patient_secu = intval(substr($patient_secu, 0, 15)); //On converti le résultat en entier et on fait en sorte de ne récupérer que les 15 premiers éléments dans le cas ou le numéro de secu >15
 		$patient_naissance = htmlspecialchars($_POST['naissance_patient']);
-		$patient_tel = substr(htmlspecialchars($_POST['tel_patient']),0,10);
+		$patient_tel = substr(htmlspecialchars($_POST['tel_patient']),0,10); //On ne récupère que les 10 premiers numéros
 		$patient_pere_id = intval(htmlspecialchars($_POST['list_patient_pere']));
 		$patient_mere_id = intval(htmlspecialchars($_POST['list_patient_mere']));
-
+		//On déclare la valeur de l'identifiant du père et de la mère
+		//Nul dans le cas ou la valeur de POST vaut none
 		if ($patient_pere_id == "none") {
 			$patient_pere_id=null;
 		}
 		if ($patient_mere_id == "none") {
 			$patient_mere_id=null;
 		}
-
+		//On prépare la requête
 		$req_add_patient = $bdd->prepare("INSERT INTO `gestion_prescription`.`patient` (`patient_id`, `patient_num_secu`, `patient_prenom`, `patient_nom`, `patient_mail`, `patient_sexe`, `patient_date_naissance`, `patient_date_deces`, `patient_num_tel`, `patient_pere_id`, `patient_mere_id`, `patient_actif`) VALUES (NULL, :patient_secu, :patient_prenom, :patient_nom, :patient_mail, :patient_sexe, :patient_naissance, NULL, :patient_tel, :patient_pere_id, :patient_mere_id, '0');");
 		//On execute
 		$req_add_patient->execute(array(
@@ -64,10 +73,11 @@
 			'patient_sexe' => $patient_sexe,
 			'patient_naissance' => $patient_naissance,
 			'patient_tel' => $patient_tel,
+			//Si la valeur de la variable php est nulle, on insert NULL en SQL
 			'patient_pere_id' => isset($patient_pere_id) ? $patient_pere_id : null,
 			'patient_mere_id' => isset($patient_mere_id) ? $patient_mere_id : null
 		));
-		$req_add_patient->closeCursor();
+		$req_add_patient->closeCursor(); // on indique que la requête est terminée
 
 
 }
@@ -79,8 +89,10 @@
 		 include('administration.php'); 
 	}?>
 	<!-- Fin Modal pour affichage pour les administrateurs-->
+	<!-- Insertion du header-->
 <?php include('header.php'); ?>
 				<div class="row" id="first_line"> <!-- DEBUT PREMIERE LIGNE cont.row1-->
+					<!-- Affichage des données de l'utilisateur -->
 					<div class="col-lg-3 col-lg-offset-1"> <!-- cont.row1.col1-->
 						<div class="row"> <!-- cont.row1.col1.row1-->
 							<div class="col-lg-12">

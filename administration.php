@@ -1,61 +1,77 @@
 <?php
+//Gère toutes les requêtes d'administration, présente sur la page d'index uniquement lorsque l'utilisateur est considéré comme administrateur
+
+
+//Sélection des utilisateurs et des gènes pour l'affichage
 $sql = "SELECT `personnel_id`,`personnel_nom`,`personnel_prenom` FROM `gestion_prescription`.`personnel` WHERE `personnel_actif`= 0;";
 $reponse = $bdd->query($sql);
+//résultats stocké dans la variable $rows_personnel
 $rows_personnel = $reponse->fetchAll();
-$reponse->closeCursor();
+$reponse->closeCursor(); //On close la requête
+
+//Sélection du type d'utilisateur disponible pour la création d'un nouvel utilisateur
 $sql = "SELECT `type_personnel_id`,`type_personnel_nom` FROM `gestion_prescription`.`type_personnel`;";
 $reponse = $bdd->query($sql);
+//résultats stocké dans la variable $rows_type_user
 $rows_type_user = $reponse->fetchAll();
 $reponse->closeCursor();
+
+//Sélection des gènes, va être utilisé lors de la création ou la supression d'un gène
+//Le gène doit être considéré comme actif(non suprimmé)
 $sql = "SELECT `gene_id`,`gene_nom` FROM `gestion_prescription`.`gene` WHERE `gene_actif`= 0;";
 $reponse = $bdd->query($sql);
+//résultats stockés dans $rows_gene
 $rows_gene = $reponse->fetchAll();
-$reponse->closeCursor();
+$reponse->closeCursor();//On close la requête
 
-//Requete pour suprimmer un utilisateur
+//Suprimmer un gène, dans le cas ou on envoi le formulaire "del_gene"
 if (isset($_POST['del_gene'])) {
 	$id_gene = htmlspecialchars($_POST['list_gene']);
+	//Au lieu de suprimmer le gène, on met à jour son statut en tant qu'"inactif"
 	$req_gene = $bdd->prepare("UPDATE `gestion_prescription`.`gene` SET `gene_actif`= 1 WHERE `gene`.`gene_id` = :id_gene;");
 	//On execute
 	$req_gene->execute(array(
 		'id_gene' => $id_gene
 	));
-	$req_gene->closeCursor();
+	$req_gene->closeCursor(); //On close la requête
 
 
 }
-
+//Suprimmer un utilisateur, dans le cas ou on envoi le formulaire del_user
 if (isset($_POST['del_user'])) {
 	$id_personnel = htmlspecialchars($_POST['list_user']);
+	//On ne suprimme pas la ligne, mais on update le statut en tant qu'inactif
 	$req_del_user = $bdd->prepare("UPDATE `gestion_prescription`.`personnel` SET `personnel_actif`= 1 WHERE `personnel`.`personnel_id` = :id_personnel;");
 	//On execute
 	$req_del_user->execute(array(
 		'id_personnel' => $id_personnel
 	));
-	$req_del_user->closeCursor();
+	$req_del_user->closeCursor();//On close la requête
 
 
 }
-
+//Suprimmer un patient, dans le cas ou on envoi le formulaire del_patient
 if (isset($_POST['del_patient'])) {
 	$id_patient = htmlspecialchars($_POST['list_patient']);
+	//L'utilisateur est updaté en tant qu'inactif, mais pas suprimmé de la base de données
 	$req_del_user = $bdd->prepare("UPDATE `gestion_prescription`.`patient` SET `patient_actif`= 1 WHERE `patient`.`patient_id` = :id_patient;");
 	//On execute
 	$req_del_user->execute(array(
 		'id_patient' => $id_patient
 	));
-	$req_del_user->closeCursor();
+	$req_del_user->closeCursor();//On close la requête
 
 
 }
-
+//Ajouter un utilisateur
 if (isset($_POST['add_user'])) {
+	//Récupération des informations envoyés par le formulaire, on échappe les caractère et on encrypte le mot de passe den SHA1
 	$user_prenom = htmlspecialchars($_POST['nom_user']);
 	$user_nom = htmlspecialchars($_POST['prenom_user']);
 	$user_mail = htmlspecialchars($_POST['mail_user']);
 	$user_password = htmlspecialchars(sha1($_POST['pass_user']));
 	$user_type = htmlspecialchars($_POST['list_type_user']);
-
+	//On prépare la requête d'insertion, en ajoutant les variables du formulaire
 	$req_add_user = $bdd->prepare("INSERT INTO `gestion_prescription`.`personnel` (`personnel_id`, `personnel_prenom`, `personnel_nom`, `personnel_mail`, `personnel_password`, `personnel_type_personnel_id`, `personnel_actif`) VALUES (NULL, :user_prenom, :user_nom, :user_mail, :user_password, :user_type, 0);");
 	//On execute
 	$req_add_user->execute(array(
@@ -65,14 +81,14 @@ if (isset($_POST['add_user'])) {
 		'user_password' => $user_password,
 		'user_type' => $user_type
 	));
-	$req_add_user->closeCursor();
+	$req_add_user->closeCursor(); //On close la requête
 
 
 }
 
 
 ?>
-
+<!-- Toute l'initerface qui va être capable de gérer les requêtes d'administration -->
 
 	<!-- Fenetre qui s'ouvre lorsque l'on clique sur "suprimmer un utilisateur" -->
 	<div class="modal fade" id="del_user" tabindex="-1" role="dialog" aria-labelledby="modal_del_user" aria-hidden="true">

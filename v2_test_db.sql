@@ -36,7 +36,6 @@ CREATE TABLE patient (
     patient_mail VARCHAR(100) DEFAULT NULL,
     patient_sexe CHAR(1) DEFAULT NULL,
     patient_date_naissance DATE DEFAULT NULL,
-    patient_date_deces DATE DEFAULT NULL,
     patient_num_tel VARCHAR(10) DEFAULT NULL,
     patient_pere_id INT UNSIGNED DEFAULT NULL,
     patient_mere_id INT UNSIGNED DEFAULT NULL,

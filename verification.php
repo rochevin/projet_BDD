@@ -1,11 +1,27 @@
-<?php 
+<!-- Page qui lance la session, se connecte à la base de données, et vérifie que l'utilisateur est bien identifiable dans la base -->
+
+<!-- On lance la session -->
+<?php session_start(); ?>
+<!-- On inclut la page de connexion -->
+<?php include('connexion.php'); ?>
+<!-- En cas d'envoit du formulaire deconnexion, on détruit la session -> retour à la page de login -->
+<?php if ((isset($_GET['action'])) && ($_GET['action'] == 'deconnexion'))
+	{
+		$_SESSION = array(); //On vide l'array
+		session_destroy(); //On détruit la session
+	}
+?>
+<?php
+//Étape qui vérifie si l'utilisateur est dans la base de données
 if (isset($_SESSION['email']) AND isset($_SESSION['mdp'])) {
+
 	//Préparation de la requête :
 	$req = $bdd->prepare("SELECT `personnel`.`personnel_id` FROM `gestion_prescription`.`personnel` WHERE `personnel_mail`=:email AND `personnel_password`=:mdp AND `personnel_actif`=0;");
 	$req->execute(array(
 		'email' => $_SESSION['email'],
 		'mdp' => $_SESSION['mdp']));
 	$resultat = $req->fetch();
+	//Si pas de résultats, affichage du login
 	if (!$resultat) {
 	  include('login.php');
 	}

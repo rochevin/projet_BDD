@@ -1,7 +1,3 @@
-<!-- On lance la session -->
-<?php session_start(); ?>
-<!-- On inclut la page de connexion -->
-<?php include('connexion.php'); ?>
 <!-- On vérifie que l'utilisateur est bien connecté et présent dans la base de données -->
 <?php include('verification.php');?>
 <!-- Si la requête de vérification contient un résultat, on peut afficher l'interface et executer les requêtes -->

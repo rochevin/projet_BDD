@@ -1,14 +1,4 @@
-<!-- On lance la session -->
-<?php session_start(); ?>
-<!-- On inclut la page de connexion -->
-<?php include('connexion.php'); ?>
-<!-- En cas d'envoit du formulaire deconnexion, on détruit la session -> retour à la page de login -->
-<?php if ((isset($_GET['action'])) && ($_GET['action'] == 'deconnexion'))
-	{
-		$_SESSION = array(); //On vide l'array
-		session_destroy(); //On détruit la session
-	}
-?>
+
 <!-- On vérifie que l'utilisateur est bien connecté et présent dans la base de données -->
 <?php include('verification.php');?>
 <?php if ($resultat) { ?>

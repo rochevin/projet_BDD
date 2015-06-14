@@ -1,5 +1,4 @@
-<?php session_start(); ?>
-<?php include('connexion.php'); ?>
+
 <?php include('verification.php');?>
 
 <?php if ($resultat) { ?>

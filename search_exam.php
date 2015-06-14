@@ -1,7 +1,16 @@
+<!-- On lance la session -->
 <?php session_start(); ?>
+<!-- On inclut la page de connexion -->
 <?php include('connexion.php'); ?>
+<!-- En cas d'envoit du formulaire deconnexion, on détruit la session -> retour à la page de login -->
+<?php if ((isset($_GET['action'])) && ($_GET['action'] == 'deconnexion'))
+	{
+		$_SESSION = array(); //On vide l'array
+		session_destroy(); //On détruit la session
+	}
+?>
+<!-- On vérifie que l'utilisateur est bien connecté et présent dans la base de données -->
 <?php include('verification.php');?>
-
 <?php if ($resultat) { ?>
 	<?php 
 	$req_exam = $bdd->prepare("SELECT `examen_id`,`examen_nom`,`examen_date`,`examen_pathologie`,`patient_nom`,`patient_prenom` FROM `gestion_prescription`.`examen` INNER JOIN `gestion_prescription`.`patient` ON `examen`.`examen_patient_id`=`patient`.`patient_id` WHERE `examen_personnel_id`=:utilisateur_id;");
@@ -22,18 +31,18 @@
 							<thead>
 								<tr>
 									<td><strong>Nom</strong></td>
-									<td><strong>Date</strong></td>
-									<td><strong>Pathologie</strong></td>
 									<td><strong>Nom du patient</strong></td>
+									<td><strong>Pathologie</strong></td>
+									<td><strong>Date</strong></td>
 								</tr>
 							</thead>
 							<tbody>
 								<?php while ($row = $req_exam->fetch()) { ?>
 									<tr>
 										<td><a href="page_examen.php?id=<?php echo $row['examen_id']; ?>"><?php echo $row['examen_nom']; ?></a></td>
-										<td><a href="page_examen.php?id=<?php echo $row['examen_id']; ?>"><?php echo $row['examen_date']; ?></a></td>
-										<td><a href="page_examen.php?id=<?php echo $row['examen_id']; ?>"><?php echo $row['examen_pathologie']; ?></a></td>
 										<td><a href="page_examen.php?id=<?php echo $row['examen_id']; ?>"><?php echo $row['patient_prenom']." ".$row['patient_nom']; ?></a></td>
+										<td><a href="page_examen.php?id=<?php echo $row['examen_id']; ?>"><?php echo $row['examen_pathologie']; ?></a></td>
+										<td><a href="page_examen.php?id=<?php echo $row['examen_id']; ?>"><?php echo $row['examen_date']; ?></a></td>
 									</tr>
 								<?php } 
 								$req_exam->closeCursor(); ?>

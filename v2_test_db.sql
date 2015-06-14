@@ -62,12 +62,10 @@ CREATE TABLE gene (
     gene_nom VARCHAR(10) NOT NULL,
     gene_chromosome CHAR(2) DEFAULT NULL,
     gene_actif BOOLEAN DEFAULT '0' NOT NULL,
+    UNIQUE KEY nom_gene (gene_nom),
     PRIMARY KEY (gene_id)
 )
 ENGINE=InnoDB;   
-
-CREATE INDEX nom_gene
-ON gene(gene_nom);
 
 
 CREATE TABLE assoc_panel_gene( /* Création dune table d'association avec pour particularité deux clefs primaires */

@@ -13,3 +13,4 @@
 	<body>
 		<div class="container-fluid"> <!-- DEBUT CONTAINER cont-->
 		<div class="row" id="first_line"> <!-- DEBUT PREMIERE LIGNE cont.row1-->
+			<div class="col-lg-12 text-center"><h1>Hopital Core Database</h1></div>

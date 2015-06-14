@@ -2,7 +2,7 @@
 		<div class="col-lg-4 col-lg-offset-4">
 			<div class="row">
 				<div class="well well-lg">
-					<legend><h2 class="text-center">Hopital Core Database</h2></legend>
+					<legend><h2 class="text-center">Authentification</h2></legend>
 					<form method="post" action="index.php">
 						<div class="form-group">
 							<label for="mail">Adresse Email</label>
@@ -30,7 +30,7 @@
 							<input name="num_secu_patient" type="text" class="form-control" id="num_secu" placeholder="Entrez votre numéro de sécurité sociale">
 						</div>
 						<legend></legend>
-						<button type="submit" class="btn btn-danger btn-lg btn-block">Résultats d'examen</button>
+						<button type="submit" class="btn btn-danger btn-lg btn-block">Résultats du dernier examen</button>
 					</form>
 				</div>
 			</div>

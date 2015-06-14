@@ -1,4 +1,4 @@
-
+<!-- On vérifie que l'utilisateur est bien connecté et présent dans la base de données -->
 <?php include('verification.php');?>
 
 <?php if ($resultat) { 

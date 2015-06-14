@@ -23,7 +23,8 @@ if (isset($_SESSION['email']) AND isset($_SESSION['mdp'])) {
 	$resultat = $req->fetch();
 	//Si pas de résultats, affichage du login
 	if (!$resultat) {
-	  include('login.php');
+		include('header_login.php');
+		include('login.php');
 	}
 } 
 else {
@@ -40,7 +41,8 @@ else {
 
 	$resultat = $req->fetch();
 
-	if (!$resultat) {
+	if (!$resultat) { 
+		include('header_login.php');
 		include('login.php');
 	}
 	else { 

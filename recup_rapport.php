@@ -183,7 +183,8 @@ if (isset($_POST['num_secu_patient']) AND isset($_POST['email_patient'])) {
 		</body>
 	</html>
 <?php }
-	else { ?>
+	else { 
+		include('header_login.php'); ?>
 		<div class="col-lg-4 col-lg-offset-4">
 			<div class="alert alert-warning alert-dismissable">
 				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -193,7 +194,8 @@ if (isset($_POST['num_secu_patient']) AND isset($_POST['email_patient'])) {
 		<?php include('login.php');
 	}
 } 
-else { ?>
+else { 
+	include('header_login.php'); ?>
 	<div class="col-lg-4 col-lg-offset-4">
 		<div class="alert alert-danger alert-dismissable">
 			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

@@ -25,20 +25,12 @@ if (isset($_POST['num_secu_patient']) AND isset($_POST['email_patient'])) {
 
 
 <?php if (($resultat) AND isset($_POST['num_secu_patient']) AND isset($_POST['email_patient'])) { 
-	$req_one = $bdd->prepare("SELECT `patient`.`patient_num_secu` ,`patient`.`patient_nom`,`patient`.`patient_prenom`,`patient`.`patient_sexe`,`patient`.`patient_date_naissance`, `patient`.`patient_mail`, `patient`.`patient_num_tel`,`examen`.`examen_id`,`examen`.`examen_nom`,`examen`.`examen_date`,`examen`.`examen_pathologie`,`examen`.`examen_commentaires`, `examen`.`examen_panel_gene_id`, `personnel`.`personnel_nom`,`personnel`.`personnel_prenom`,`personnel`.`personnel_mail`,pere_patient.`patient_nom` AS pere_nom,pere_patient.`patient_prenom` AS pere_prenom, mere_patient.`patient_nom` AS mere_nom, mere_patient.`patient_prenom` mere_prenom FROM `gestion_prescription`.`patient` INNER JOIN `gestion_prescription`.`examen` ON `examen_patient_id`=`patient_id` INNER JOIN `gestion_prescription`.`personnel` ON `examen_personnel_id`=`personnel_id` LEFT JOIN `patient` as pere_patient ON pere_patient.`patient_id`=`patient`.patient_pere_id LEFT JOIN `patient` as mere_patient ON mere_patient.`patient_id`=`patient`.patient_mere_id WHERE `examen_patient_id`=:id_patient ORDER BY `examen_date` DESC LIMIT 1;");
+	$req_one = $bdd->prepare("SELECT `patient`.`patient_num_secu` ,`patient`.`patient_nom`,`patient`.`patient_prenom`,`patient`.`patient_sexe`,`patient`.`patient_date_naissance`, `patient`.`patient_mail`, `patient`.`patient_num_tel`,`examen`.`examen_id`,`examen`.`examen_nom`,`examen`.`examen_date`,`examen`.`examen_pathologie`,`examen`.`examen_commentaires`, `personnel`.`personnel_nom`,`personnel`.`personnel_prenom`,`personnel`.`personnel_mail`,pere_patient.`patient_nom` AS pere_nom,pere_patient.`patient_prenom` AS pere_prenom, mere_patient.`patient_nom` AS mere_nom, mere_patient.`patient_prenom` mere_prenom FROM `gestion_prescription`.`patient` INNER JOIN `gestion_prescription`.`examen` ON `examen_patient_id`=`patient_id` INNER JOIN `gestion_prescription`.`personnel` ON `examen_personnel_id`=`personnel_id` LEFT JOIN `patient` as pere_patient ON pere_patient.`patient_id`=`patient`.patient_pere_id LEFT JOIN `patient` as mere_patient ON mere_patient.`patient_id`=`patient`.patient_mere_id WHERE `examen_patient_id`=:id_patient ORDER BY `examen_date` DESC LIMIT 1;");
 	$req_one->execute(array(
 			'id_patient' => $id_patient
 		));
 	$row_informations = $req_one->fetch();
-	$id_panel = $row_informations['examen_panel_gene_id'];
 	$req_one->closeCursor();
-	//Requête pour récuperer les gènes du panel liés à l'examen (sans le nom du panel)
-	$req_two = $bdd->prepare("SELECT `gene`.`gene_nom` FROM `gestion_prescription`.`assoc_panel_gene` INNER JOIN `gestion_prescription`.`gene` ON `assoc_panel_gene`.`assoc_gene_id`=`gene`.`gene_id` WHERE `assoc_panel_id`=:id_panel;");
-	$req_two->execute(array(
-			'id_panel' => $id_panel
-		));
-	$rows_gene = $req_two->fetchAll();
-	$req_two->closeCursor();
 
 	if ($row_informations) {
 ?>

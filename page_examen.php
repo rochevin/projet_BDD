@@ -6,29 +6,13 @@
 	<?php 
 	$id_exam = intval(htmlspecialchars($_GET['id']));
 	//Requête pour récupérer les informations sur l'examen, sur le prescripteur qui a réalisé l'examen et sur le patient
-	$req_one = $bdd->prepare("SELECT `examen`.`examen_nom`,`examen`.`examen_date`,`examen`.`examen_pathologie`,`examen`.`examen_commentaires`, `examen`.`examen_panel_gene_id`,`patient`.`patient_num_secu` ,`patient`.`patient_nom`,`patient`.`patient_prenom`,`patient`.`patient_sexe`,`patient`.`patient_date_naissance`, `patient`.`patient_mail`, `patient`.`patient_num_tel`,`patient`.`patient_pere_id`,`patient`.`patient_mere_id`, `personnel`.`personnel_nom`,`personnel`.`personnel_prenom`,`personnel`.`personnel_mail` FROM `gestion_prescription`.`examen` INNER JOIN `gestion_prescription`.`patient` ON `examen_patient_id`=`patient_id` INNER JOIN `gestion_prescription`.`personnel` ON `examen_personnel_id`=`personnel_id` WHERE `examen_id`=:id_exam AND `examen_personnel_id`=:id_prescripteur;");
+	$req_one = $bdd->prepare("SELECT `patient`.`patient_num_secu` ,`patient`.`patient_nom`,`patient`.`patient_prenom`,`patient`.`patient_sexe`,`patient`.`patient_date_naissance`, `patient`.`patient_mail`, `patient`.`patient_num_tel`,`examen`.`examen_nom`,`examen`.`examen_date`,`examen`.`examen_pathologie`,`examen`.`examen_commentaires`, `examen`.`examen_panel_gene_id`, `personnel`.`personnel_nom`,`personnel`.`personnel_prenom`,`personnel`.`personnel_mail`,pere_patient.`patient_nom` AS pere_nom,pere_patient.`patient_prenom` AS pere_prenom, mere_patient.`patient_nom` AS mere_nom, mere_patient.`patient_prenom` mere_prenom FROM `gestion_prescription`.`patient` INNER JOIN `gestion_prescription`.`examen` ON `examen_patient_id`=`patient_id` INNER JOIN `gestion_prescription`.`personnel` ON `examen_personnel_id`=`personnel_id` LEFT JOIN `patient` as pere_patient ON pere_patient.`patient_id`=`patient`.patient_pere_id LEFT JOIN `patient` as mere_patient ON mere_patient.`patient_id`=`patient`.patient_mere_id WHERE `examen_id`=:id_exam AND `examen_personnel_id`=:id_prescripteur");
 	$req_one->execute(array(
 			'id_exam' => $id_exam,
 			'id_prescripteur' => $_SESSION['id']
 		));
 	$row_informations = $req_one->fetch();
 
-	if ($row_informations['patient_pere_id']) {
-		$req_pere = $bdd->prepare("SELECT `patient_nom`,`patient_prenom` FROM `patient` WHERE `patient_id`=:id_pere;");
-
-		$req_pere->execute(array(
-			'id_pere' => $row_informations['patient_pere_id']
-		));
-		$row_pere = $req_pere->fetch();
-	}
-	if ($row_informations['patient_mere_id']) {
-		$req_mere = $bdd->prepare("SELECT `patient_nom`,`patient_prenom` FROM `patient` WHERE `patient_id`=:id_mere;");
-
-		$req_mere->execute(array(
-			'id_mere' => $row_informations['patient_mere_id']
-		));
-		$row_mere = $req_mere->fetch();
-	}
 
 	$id_panel = $row_informations['examen_panel_gene_id'];
 	$req_one->closeCursor();
@@ -116,20 +100,23 @@
 													<td><strong>Email :</strong></td>
 													<td><a href="mailto:<?php echo $row_informations['patient_mail']; ?>"><?php echo $row_informations['patient_mail']; ?></a></td>
 												</tr>
+												<?php if($row_informations['patient_num_tel']) {?>
 												<tr>
 													<td><strong>Numéro tel :</strong></td>
 													<td><?php echo $row_informations['patient_num_tel']; ?></td>
 												</tr>
-												<?php if ($row_pere) {?>
+												<?php
+													}
+												if ($row_informations['pere_nom']) {?>
 												<tr>
 													<td><strong>Père :</strong></td>
-													<td><?php echo $row_pere['patient_prenom']." ".$row_pere['patient_nom']; ?></td>
+													<td><?php echo $row_informations['pere_prenom']." ".$row_informations['pere_nom']; ?></td>
 												</tr>
 												<?php } ?>
-												<?php if ($row_mere) {?>
+												<?php if ($row_informations['mere_nom']) {?>
 												<tr>
 													<td><strong>Mère :</strong></td>
-													<td><?php echo $row_mere['patient_prenom']." ".$row_mere['patient_nom']; ?></td>
+													<td><?php echo $row_informations['mere_prenom']." ".$row_informations['mere_nom']; ?></td>
 												</tr>
 												<?php } ?>
 											</tbody>

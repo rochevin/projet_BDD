@@ -268,3 +268,38 @@ INSERT INTO `gestion_prescription`.`assoc_panel_gene` (`assoc_gene_id`, `assoc_p
 VALUES ('1', '1'),
 ('2', '1'),
 ('3', '1');
+
+INSERT INTO `gestion_prescription`.`panel_gene` (`panel_gene_id`, `panel_gene_nom`) VALUES (NULL, 'polykystose_renale');
+INSERT INTO `gestion_prescription`.`assoc_panel_gene` (`assoc_gene_id`, `assoc_panel_id`) 
+VALUES ('4', '2'),
+('5', '2'),
+('6', '2');
+
+INSERT INTO `gestion_prescription`.`panel_gene` (`panel_gene_id`, `panel_gene_nom`) VALUES (NULL, 'intelectual_disorder');
+INSERT INTO `gestion_prescription`.`assoc_panel_gene` (`assoc_gene_id`, `assoc_panel_id`) 
+VALUES ('7', '3'),
+('8', '3'),
+('9', '3'),
+('10', '3'),
+('11', '3'),
+('12', '3'),
+('13', '3'),
+('14', '3'),
+('15', '3');
+
+INSERT INTO `gestion_prescription`.`panel_gene` (`panel_gene_id`, `panel_gene_nom`) VALUES (NULL, 'mucoviscidose');
+INSERT INTO `gestion_prescription`.`assoc_panel_gene` (`assoc_gene_id`, `assoc_panel_id`) 
+VALUES ('16', '4'),
+('16', '4'),
+('17', '4'),
+('18', '4'),
+('19', '4'),
+('20', '4');
+
+INSERT INTO `gestion_prescription`.`panel_gene` (`panel_gene_id`, `panel_gene_nom`) VALUES (NULL, 'maladie_crohn');
+INSERT INTO `gestion_prescription`.`assoc_panel_gene` (`assoc_gene_id`, `assoc_panel_id`) 
+VALUES ('21', '5'),
+('22', '5'),
+('23', '5'),
+('24', '5'),
+('25', '5'); 

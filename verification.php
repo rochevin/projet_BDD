@@ -1,11 +1,11 @@
 <!-- Page qui lance la session, se connecte à la base de données, et vérifie que l'utilisateur est bien identifiable dans la base -->
-
-<!-- On lance la session -->
-<?php session_start(); ?>
-<!-- On inclut la page de connexion -->
-<?php include('connexion.php'); ?>
-<!-- En cas d'envoit du formulaire deconnexion, on détruit la session -> retour à la page de login -->
-<?php if ((isset($_GET['action'])) && ($_GET['action'] == 'deconnexion'))
+<?php 
+// On lance la session
+session_start();
+//On inclut la page de connexion
+include('connexion.php');
+//En cas d'envoit du formulaire deconnexion, on détruit la session -> retour à la page de login
+if ((isset($_GET['action'])) && ($_GET['action'] == 'deconnexion'))
 	{
 		$_SESSION = array(); //On vide l'array
 		session_destroy(); //On détruit la session
@@ -26,8 +26,9 @@ if (isset($_SESSION['email']) AND isset($_SESSION['mdp'])) {
 		include('header_login.php');
 		include('login.php');
 	}
-} 
-else {
+	$req->closeCursor();
+} elseif (!empty($_POST['mdp_utilisateur']) AND !empty($_POST['email_utilisateur'])) {
+
 	//Récupération des identifiants de l'utilisateur, connexion à la base, et dans le cas ou celui-ci est enregistré, affichage de l'index
 	//Préparation de la requête :
 	$req = $bdd->prepare("SELECT `personnel`.`personnel_id`,`personnel`.`personnel_prenom`,`personnel`.`personnel_nom`,`personnel`.`personnel_mail`,`personnel`.`personnel_password`,`type_personnel`.`type_personnel_nom`,`type_personnel`.`type_personnel_rang` FROM `gestion_prescription`.`personnel` INNER JOIN `gestion_prescription`.`type_personnel` ON `personnel`.`personnel_type_personnel_id`=`type_personnel`.`type_personnel_id` WHERE `personnel_mail`=:email AND `personnel_password`=:mdp AND `personnel_actif`=0;");
@@ -43,6 +44,14 @@ else {
 
 	if (!$resultat) { 
 		include('header_login.php');
+		if (!empty($_POST['mdp_utilisateur']) AND !empty($_POST['email_utilisateur'])) { ?>
+			<div class="col-lg-4 col-lg-offset-4">
+				<div class="alert alert-danger alert-dismissable">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					<strong><span class='glyphicon glyphicon-exclamation-sign'></span></strong><strong>Erreur !</strong> Login ou mot de passe incorrect
+				</div>
+			</div>
+		<?php }
 		include('login.php');
 	}
 	else { 
@@ -54,6 +63,17 @@ else {
 		$_SESSION['type'] = $resultat['type_personnel_nom'];
 		$_SESSION['rang'] = $resultat['type_personnel_rang'];
   }
+  $req->closeCursor();
+} else { //Utile en cas de première ouverture de la page
+	include('header_login.php');
+	if (($_GET['action'] == 'deconnexion')) { ?>
+		<div class="col-lg-4 col-lg-offset-4">
+			<div class="alert alert-info alert-dismissable">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<strong><span class='glyphicon glyphicon-exclamation-sign'></span></strong>Vous avez été déconnecté avec succès !
+			</div>
+		</div>
+	<?php }
+	include('login.php');
 }
-$req->closeCursor();
- ?>
+ ?>}

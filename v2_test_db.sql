@@ -290,7 +290,6 @@ VALUES ('7', '3'),
 INSERT INTO `gestion_prescription`.`panel_gene` (`panel_gene_id`, `panel_gene_nom`) VALUES (NULL, 'mucoviscidose');
 INSERT INTO `gestion_prescription`.`assoc_panel_gene` (`assoc_gene_id`, `assoc_panel_id`) 
 VALUES ('16', '4'),
-('16', '4'),
 ('17', '4'),
 ('18', '4'),
 ('19', '4'),
@@ -303,3 +302,11 @@ VALUES ('21', '5'),
 ('23', '5'),
 ('24', '5'),
 ('25', '5'); 
+
+
+INSERT INTO `gestion_prescription`.`personnel` (`personnel_id`, `personnel_prenom`, `personnel_nom`, `personnel_mail`, `personnel_password`, `personnel_type_personnel_id`) VALUES (NULL, 'Gregory', 'House', 'dr.house@cc.fr', 'ba203059615a933ae7a3638e1adde76aa7290398', '2'), 
+(NULL, 'Cristina', 'Yang', 'cristina.yang@cc.fr', 'b5539108cc78f3f7fac087a88cad130c6ee6842d', '2'), 
+(NULL, 'Derek', 'Shepherd', 'dr.mamour@cc.fr', 'f0e045bf8c5b9ebac14df3986aa6d426660b6d19', '2');
+
+INSERT INTO `gestion_prescription`.`examen` (`examen_id`, `examen_nom`, `examen_date`, `examen_pathologie`, `examen_patient_id`, `examen_panel_gene_id`,`examen_personnel_id`)
+VALUES (NULL, 'house_watson', '2015-06-12', 'maladie_crohn', '10', '5', '1');

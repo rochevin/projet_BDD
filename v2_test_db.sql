@@ -45,7 +45,7 @@ CREATE TABLE patient (
 )
 ENGINE=InnoDB;   
 
-CREATE INDEX nom_prenom_patient /* Permet une recher rapide des patients par leur nom et prénom */
+CREATE INDEX nom_prenom_patient /* Permet une recherche rapide des patients par leur nom et prénom */
 ON patient(patient_nom,patient_prenom);
 
 CREATE TABLE panel_gene (
@@ -121,13 +121,18 @@ ALTER TABLE examen ADD CONSTRAINT fk_examen_personnel_id
         REFERENCES personnel(personnel_id);
 
 /* Insertion de données */ 
+/* Création de deux types personnel : celui de l'admin et celui des prescripteurs */
 INSERT INTO `gestion_prescription`.`type_personnel` (`type_personnel_id`, `type_personnel_nom`, `type_personnel_rang`) VALUES (NULL, 'Administrateur', '1'),
     (NULL, 'Prescripteur', '2');
 
-
+/* Création de l'admin : George Michael */
 INSERT INTO `gestion_prescription`.`personnel` (`personnel_id`, `personnel_prenom`, `personnel_nom`, `personnel_mail`, `personnel_password`, `personnel_type_personnel_id`) VALUES (NULL, 'George', 'Michael', 'george.michael@cc.fr', '5ed25af7b1ed23fb00122e13d7f74c4d8262acd8', '1');
+/* Création de trois prescripteurs */
+INSERT INTO `gestion_prescription`.`personnel` (`personnel_id`, `personnel_prenom`, `personnel_nom`, `personnel_mail`, `personnel_password`, `personnel_type_personnel_id`) VALUES (NULL, 'Gregory', 'House', 'dr.house@cc.fr', 'ba203059615a933ae7a3638e1adde76aa7290398', '2'), 
+(NULL, 'Cristina', 'Yang', 'cristina.yang@cc.fr', 'b5539108cc78f3f7fac087a88cad130c6ee6842d', '2'), 
+(NULL, 'Derek', 'Shepherd', 'dr.mamour@cc.fr', 'f0e045bf8c5b9ebac14df3986aa6d426660b6d19', '2');
 
-
+/* Insertion de gènes */
 INSERT INTO `gestion_prescription`.`gene` (`gene_id`, `gene_nom`, `gene_chromosome`)
 VALUES (NULL, 'DHX33', '17'),
 (NULL, 'DPM1', '20'),
@@ -230,6 +235,8 @@ VALUES (NULL, 'DHX33', '17'),
 (NULL, 'ANKIB1', '7'),
 (NULL, 'CAMKK1', '17');
 
+
+/* Insertion de patients */
 INSERT INTO `gestion_prescription`.`patient` (`patient_id`, `patient_num_secu`, `patient_prenom`, `patient_nom`, `patient_mail`, `patient_sexe`, `patient_date_naissance`, `patient_num_tel`, `patient_pere_id`, `patient_mere_id`)
 VALUES (NULL, '372542127966880', 'Leo', 'Giles', 'leo.giles@cc.fr', 'H', '1960-06-20', '0772964051', NULL, NULL),
 (NULL,'458268732763829','Georgia','Richardson','georgia.richardson@cc.fr','F','1955-09-09','0772964051',NULL,NULL),
@@ -262,7 +269,7 @@ VALUES (NULL, '372542127966880', 'Leo', 'Giles', 'leo.giles@cc.fr', 'H', '1960-0
 (NULL,'302256620023399','Simon','Torres','simon.torres@cc.fr','H','1984-06-14','0219527916','23','11');
 
 
-
+/* Création de 5 panels de gènes */
 INSERT INTO `gestion_prescription`.`panel_gene` (`panel_gene_id`, `panel_gene_nom`) VALUES (NULL, 'cancer_sein');
 INSERT INTO `gestion_prescription`.`assoc_panel_gene` (`assoc_gene_id`, `assoc_panel_id`) 
 VALUES ('1', '1'),
@@ -304,9 +311,7 @@ VALUES ('21', '5'),
 ('25', '5'); 
 
 
-INSERT INTO `gestion_prescription`.`personnel` (`personnel_id`, `personnel_prenom`, `personnel_nom`, `personnel_mail`, `personnel_password`, `personnel_type_personnel_id`) VALUES (NULL, 'Gregory', 'House', 'dr.house@cc.fr', 'ba203059615a933ae7a3638e1adde76aa7290398', '2'), 
-(NULL, 'Cristina', 'Yang', 'cristina.yang@cc.fr', 'b5539108cc78f3f7fac087a88cad130c6ee6842d', '2'), 
-(NULL, 'Derek', 'Shepherd', 'dr.mamour@cc.fr', 'f0e045bf8c5b9ebac14df3986aa6d426660b6d19', '2');
 
+/* Création d'un examen */
 INSERT INTO `gestion_prescription`.`examen` (`examen_id`, `examen_nom`, `examen_date`, `examen_pathologie`, `examen_patient_id`, `examen_panel_gene_id`,`examen_personnel_id`)
 VALUES (NULL, 'house_watson', '2015-06-12', 'maladie_crohn', '10', '5', '1');

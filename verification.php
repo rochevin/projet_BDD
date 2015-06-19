@@ -1,7 +1,5 @@
-<!-- Page qui lance la session, se connecte à la base de données, et vérifie que l'utilisateur est bien identifiable dans la base -->
+<!-- Page qui se connecte à la base de données, et vérifie que l'utilisateur est bien identifiable dans la base , initie la destruction de la session dans le cas ou la personne clique sur deconnexion -->
 <?php 
-// On lance la session
-session_start();
 //On inclut la page de connexion
 include('connexion.php');
 //En cas d'envoit du formulaire deconnexion, on détruit la session -> retour à la page de login
@@ -76,4 +74,4 @@ if (isset($_SESSION['email']) AND isset($_SESSION['mdp'])) {
 	<?php }
 	include('login.php');
 }
- ?>}
+ ?>

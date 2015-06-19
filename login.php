@@ -1,4 +1,5 @@
 <!-- Page de login, est inclue automatiquement à la première session et si l'utilisateur n'est pas identifiable dans la base -->
+<!-- A partir de cette page, on peut soit se connecter si on est un utilisateur, soit récupérer le dernier examen réalisé si on est un patient -->
 		<div class="col-lg-4 col-lg-offset-4">
 			<div class="row">
 				<div class="well well-lg">

@@ -1,5 +1,5 @@
 <?php
-//Connexion à la base de données, présente sur toutes les pages
+//Connexion à la base de données gestion_prescription, présente sur toutes les pages
 try
 {
 	$bdd = new PDO('mysql:host=localhost;dbname=gestion_prescription;charset=utf8', 'root', 'root');

@@ -1,10 +1,15 @@
+<!-- cette page est différentes des autres, puisqu'elle ne fait pas partie directement de l'interface, on ne lance pas de session, et possède un header different, pour ne pas inclure la navbar -->
+<!-- On se connecte à la base de données -->
 <?php include('connexion.php'); ?>
 
 <?php 
+//On vérifie l'existence des variables POST
 if (isset($_POST['num_secu_patient']) AND isset($_POST['email_patient'])) {
-	$req = $bdd->prepare("SELECT `patient_id` FROM `gestion_prescription`.`patient` WHERE `patient_num_secu`=:secu AND `patient_mail`=:email;");
+	//On stocke les variables post dans des variables, et on échappe les caractères
 	$num_secu_patient = intval(htmlspecialchars($_POST['num_secu_patient']));
 	$email_patient = htmlspecialchars($_POST['email_patient']);
+	//On prépare la requête : va utiliser les variables post pour un SELECT, et vérifie ainsi que les données du patient sont bonnes
+	$req = $bdd->prepare("SELECT `patient_id` FROM `gestion_prescription`.`patient` WHERE `patient_num_secu`=:secu AND `patient_mail`=:email;");
 	// Vérification des identifiants
 	$req->execute(array(
 		'email' => $email_patient,
@@ -12,6 +17,7 @@ if (isset($_POST['num_secu_patient']) AND isset($_POST['email_patient'])) {
 
 	$resultat = $req->fetch();
 	$id_patient = $resultat['patient_id'];
+//Si les variables POST n'existent pas, on renvoit un message d'erreur et la page login
 } else { ?>
 	<div class="col-lg-4 col-lg-offset-4">
 		<div class="alert alert-danger alert-dismissable">
@@ -23,8 +29,8 @@ if (isset($_POST['num_secu_patient']) AND isset($_POST['email_patient'])) {
 }
 ?>
 
-
-<?php if (($resultat) AND isset($_POST['num_secu_patient']) AND isset($_POST['email_patient'])) { 
+<!-- Avant d'afficher la suite, on vérifie que la requête précedente à produit un résultat, et que la variable id patient existe -->
+<?php if (($resultat) AND isset($id_patient)) { 
 	$req_exam = $bdd->prepare("SELECT `patient`.`patient_num_secu` ,`patient`.`patient_nom`,`patient`.`patient_prenom`,`patient`.`patient_sexe`,`patient`.`patient_date_naissance`, `patient`.`patient_mail`, `patient`.`patient_num_tel`,`examen`.`examen_id`,`examen`.`examen_nom`,`examen`.`examen_date`,`examen`.`examen_pathologie`,`examen`.`examen_commentaires`, `personnel`.`personnel_nom`,`personnel`.`personnel_prenom`,`personnel`.`personnel_mail`,pere_patient.`patient_nom` AS pere_nom,pere_patient.`patient_prenom` AS pere_prenom, mere_patient.`patient_nom` AS mere_nom, mere_patient.`patient_prenom` mere_prenom FROM `gestion_prescription`.`patient` INNER JOIN `gestion_prescription`.`examen` ON `examen_patient_id`=`patient_id` INNER JOIN `gestion_prescription`.`personnel` ON `examen_personnel_id`=`personnel_id` LEFT JOIN `patient` as pere_patient ON pere_patient.`patient_id`=`patient`.patient_pere_id LEFT JOIN `patient` as mere_patient ON mere_patient.`patient_id`=`patient`.patient_mere_id WHERE `examen_patient_id`=:id_patient ORDER BY `examen_date` DESC LIMIT 1;");
 	$req_exam->execute(array(
 			'id_patient' => $id_patient
@@ -32,6 +38,7 @@ if (isset($_POST['num_secu_patient']) AND isset($_POST['email_patient'])) {
 	$row_informations = $req_exam->fetch();
 	$req_exam->closeCursor();
 
+	//Si la requête renvoi un résultat, on affiche la page, avec les données en php comme variables
 	if ($row_informations) {
 ?>
 	<!DOCTYPE html>
@@ -183,6 +190,7 @@ if (isset($_POST['num_secu_patient']) AND isset($_POST['email_patient'])) {
 		</body>
 	</html>
 <?php }
+	//Si le resultat de row_information est vide, on renvoit vers le login, en indiquant que le patient n'a pas d'examens
 	else { 
 		include('header_login.php'); ?>
 		<div class="col-lg-4 col-lg-offset-4">
@@ -194,7 +202,7 @@ if (isset($_POST['num_secu_patient']) AND isset($_POST['email_patient'])) {
 		<?php include('login.php');
 	}
 } 
-else { 
+else { //Si la première requête ne renvoit pas de résultats, c'est que les informations ne sont pas valides
 	include('header_login.php'); ?>
 	<div class="col-lg-4 col-lg-offset-4">
 		<div class="alert alert-danger alert-dismissable">

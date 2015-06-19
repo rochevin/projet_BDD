@@ -1,7 +1,6 @@
 <?php
 //Gère toutes les requêtes d'administration, présente sur la page d'index uniquement lorsque l'utilisateur est considéré comme administrateur
 
-
 //Sélection des utilisateurs et des gènes pour l'affichage
 $sql = "SELECT `personnel_id`,`personnel_nom`,`personnel_prenom` FROM `gestion_prescription`.`personnel` WHERE `personnel_actif`= 0;";
 $reponse = $bdd->query($sql);

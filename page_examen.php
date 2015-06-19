@@ -1,3 +1,5 @@
+<!-- On lance la session php -->
+<?php session_start();?>
 <!-- On vérifie que l'utilisateur est bien connecté et présent dans la base de données -->
 <?php include('verification.php');?>
 

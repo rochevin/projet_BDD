@@ -3,8 +3,8 @@
 		<div class="row"> <!-- DEBUT FOOTER -->
 			<div class="footer">
 				<div class="container">
-					<div class="col-lg-2 col-lg-offset-5">
-						<h6></h6>
+					<div class="col-lg-4 col-lg-offset-4 text-center">
+						<h4 id="footer_title"><strong><?php echo date('Y')." - Hopital Core Database" ?></strong></h4>
 					</div>
 				</div>
 			</div>
